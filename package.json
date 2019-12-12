@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "🥑 Continuous contract testing for HTTP APIs",
   "main": "index.js",
+  "bin": {
+    "avocat": "./index.js"
+  },
   "scripts": {
     "test": "jest"
   },
@@ -18,5 +21,8 @@
   "license": "ISC",
   "devDependencies": {
     "jest": "^24.9.0"
+  },
+  "dependencies": {
+    "commander": "^4.0.1"
   }
 }
