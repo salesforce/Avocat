@@ -1,4 +1,4 @@
-import {App} from "./app";
+import {App} from './app';
 
 
 describe('App class test', () => {
@@ -7,4 +7,3 @@ describe('App class test', () => {
         expect(app.getX()).toStrictEqual('This is x');
     });
 });
-

@@ -12,11 +12,16 @@
     "build": "tsc -p .",
     "install:global": "npm i -g && avocat",
     "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
-    "test": "jest --coverage",
-    "test:watch": "jest --coverage --watchAll"
+    "test": "jest src/ --config jest.config.js --runInBand",
+    "coverage": "npm test -- --coverage",
+    "coverage:watch": "jest --coverage --watchAll",
+    "validate": "eslint 'src/**'",
+    "ci:test": "npm test --ci -i",
+    "ci:coverage": "npm run coverage --ci -i",
+    "ci:validate": "npm run validate"
   },
   "engines": {
-    "node": ">=12.13.1",
+    "node": ">=10.15.3",
     "npm": ">=6.12.1"
   },
   "repository": {
@@ -28,6 +33,15 @@
   "devDependencies": {
     "@types/jest": "^25.1.4",
     "@types/node": "^13.7.7",
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jest": "^23.8.2",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "jest": "^25.0.0",
     "nodemon": "^2.0.2",
     "ts-jest": "^25.0.0",

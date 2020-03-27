@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
-import {App} from "./app/app";
+import {App} from './app/app';
 const chalk  = require('chalk');
 const clear = require('clear');
 const figlet = require('figlet');
-// const path = require('path');
 const program = require('commander');
 
 clear(); // clear console every time
@@ -15,8 +14,7 @@ console.log(
 );
 
 program
-    // .version(process.env.npm_package_version)
-    .description("🥑 Continuous contract testing for HTTP APIs")
+    .description('🥑 Continuous contract testing for HTTP APIs')
     .option('-t, --test', 'Test if my class works')
     .option('-p, --peppers', 'Add peppers')
     .option('-P, --pineapple', 'Add pineapple')
