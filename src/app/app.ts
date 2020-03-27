@@ -1,5 +1,5 @@
 export class App {
-    private x = "This is x";
+    private x = 'This is x';
 
     constructor() {
     }
