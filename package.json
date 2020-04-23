@@ -7,12 +7,13 @@
     "avocat": "./dist/index.js"
   },
   "scripts": {
-    "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/main/index.ts",
     "create": "npm run build && npm run install:global",
     "build": "tsc -p .",
     "install:global": "npm i -g && avocat",
     "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
     "test": "jest src/ --config jest.config.js --runInBand",
+    "test:updateSnapshot": "jest src/ --config jest.config.js --runInBand --updateSnapshot",
     "coverage": "npm test -- --coverage",
     "coverage:watch": "jest --coverage --watchAll",
     "validate": "eslint 'src/**'",
@@ -31,13 +32,15 @@
   "author": "Product Engagement Platform (Search PEP) team, Salesforce",
   "license": "ISC",
   "devDependencies": {
+    "@types/clear": "^0.1.0",
+    "@types/figlet": "^1.2.0",
     "@types/jest": "^25.1.4",
     "@types/node": "^13.7.7",
-    "@typescript-eslint/eslint-plugin": "^2.25.0",
-    "@typescript-eslint/parser": "^2.25.0",
+    "@typescript-eslint/eslint-plugin": "^2.29.0",
+    "@typescript-eslint/parser": "^2.29.0",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jest": "^23.8.2",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
@@ -53,7 +56,9 @@
     "clear": "^0.1.0",
     "commander": "^4.1.1",
     "figlet": "^1.3.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "reflect-metadata": "^0.1.13",
+    "typedi": "^0.8.0"
   },
   "directories": {
     "dist": "dist"
