@@ -29,17 +29,20 @@ Avocat installation is a simple process. It won't take too much of your time :)
 
 ### Installation
 - Clone this git repository into a local directory
+
 - Install npm dependencies
     ```sh
         $ npm install  
     ```
-- That's it! Start Avocat by running
+
+- Install Avocat globally
+  ```sh
+      $ npm run install:global  
+  ```
+  
+- That's it! You can start Avocat
     ```sh
-        $ npm start  
-    ```
-- You can install avocat globally as well by running
-    ```sh
-        $ npm run install:global  
+        $ avocat
     ```
 
 ## Running tests
@@ -48,7 +51,13 @@ Trust is our first value, and to do so, we have strict quality checks and metric
 ### Run unit tests
 - We use Jest to write unit tests, you can run them easily with
     ```sh
-        $ npm test  
+        $ npm test   
+    ```
+  
+### Update snapshots
+- We use Jest to generate snapshots of avocat expected UX, in case of modifications update them with
+    ```sh
+        $ npm run test:updateSnapshot  
     ```
 
 ### Run Code Coverage
@@ -69,12 +78,16 @@ Before you start using avocat, make sure you've installed it globally, otherwise
 
 ### CLI Commands
 
+- **CLI::status** <br/>
+    This command allows you check if there is pending changes in your local repositories. It takes no parameters or options. <br/>
+    e.g. ``` $ avocat status ``` <br/>
+    *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI%3A%3Astatus).*
+
 - **CLI::import** <br/>
     This command allows you to import new contract version into local avocat repository. It takes one parameter which is your contract file. <br/>
-    e.g. ``` $ avocat import <file_path> ``` <br/>
+    e.g. ``` $ avocat import <contract_path> ``` <br/>
     *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI%3A%3Aimport).*
     
-- CLI::status
 - CLI::amend
 - CLI::pull
 - CLI::push
@@ -85,7 +98,14 @@ Before you start using avocat, make sure you've installed it globally, otherwise
 This section describes our code files structure.
 
 #### Source code files
-Could be found in avocat/src directory
+Could be found in avocat/src directory. <br/>
+```
+    |_ main             # source code and unit tests        
+      |_ cli            # commands UX management            
+      |_ core           # avocat business logic             
+    |_ index.ts         # loads CliApp and runs avocat      
+    |_ test             # integration tests and test utils 
+```
 
 #### Config files
 All config files could be found under the root directory.
@@ -98,25 +118,20 @@ All config files could be found under the root directory.
 ### Additional Scripts
 We've added some custom scripts that might be useful when coding in Avocat.
 
+- **ts-node:** this command is an alternative way to run avocat when you don't want to install it globally every time. You can run it with 
+    ``` sh 
+      $ ts-node src/main/index.ts
+    ```
+
 - **Build:** this command transpiles typescript code into javascript. Transpiled files could be found in avocat/dist folder. You can run it with 
     ``` sh 
         $ npm run build
     ```
   
-- **Start:** this command becomes very handy when writing new code. It transpiles changed code automatically into Javascript, then it runs avocat on terminal. Transpiled files could be found in avocat/dist folder. You can run it with 
-  ``` sh 
-      $ npm run start
-  ```
-  
-- **Create:** this command transpiles changed code automatically into Javascript, then installs avocat new version globally. You can run it with 
-  ``` sh 
-      $ npm run create
-  ```
-  
 - **Refresh:** this command removes node_modules directory and package-lock.json file, then re-installs new versions of dependencies. You can run it with 
-  ``` sh 
+    ``` sh 
       $ npm run refresh
-  ```
+    ```
   
 - **Other commands:** ("ci:test", "ci:coverage", "ci:validate") these custom commands are used by [SFCI](https://searchdevci.dop.sfdc.net/job/searchdev/job/avocat/) when pushing new changes.
 

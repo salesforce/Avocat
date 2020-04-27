@@ -2,15 +2,13 @@
   "name": "avocat",
   "version": "0.1.0",
   "description": "🥑 Continuous contract testing for HTTP APIs",
-  "main": "./dist/index.js",
+  "main": "./dist/src/main/index.js",
   "bin": {
-    "avocat": "./dist/index.js"
+    "avocat": "./dist/src/main/index.js"
   },
   "scripts": {
-    "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/main/index.ts",
-    "create": "npm run build && npm run install:global",
     "build": "tsc -p .",
-    "install:global": "npm i -g && avocat",
+    "install:global": "npm run build && npm i -g && avocat",
     "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
     "test": "jest src/ --config jest.config.js --runInBand",
     "test:updateSnapshot": "jest src/ --config jest.config.js --runInBand --updateSnapshot",
