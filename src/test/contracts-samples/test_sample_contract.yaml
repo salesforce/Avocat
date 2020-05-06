@@ -1,0 +1,200 @@
+openapi: "3.0.0"
+info:
+  version: "2.2.2"
+  title: "TEST_SAMPLE_CONTRACT"
+  description: This is test sample contract
+servers:
+  - url: "test/sample/contract"
+paths:
+  /mru:
+    get:
+      summary: "Loads user's MRUs"
+      security:
+        - BearerAuth: []
+      description: ""
+      parameters:
+      - name: "sobject"
+        in: "query"
+        description: "The comma separated list of objects that the MRU are scoped to, such as Account or offer__c. All MRUs of all types are fetched by default"
+        required: false
+        schema:
+          type: "string"
+          pattern: "^.+(,.+)*$"
+        examples:
+          oneItem:
+            value: "Account"
+          multipleItems:
+            value: "Account,Work"
+      - name: "limit"
+        in: "query"
+        description: "The number of results to return"
+        required: false
+        schema:
+          type: "integer"
+          minimum: 1
+          maximum: 200
+          default: 200
+        example: 100
+      - name: "dynamicFields"
+        in: "query"
+        description: "A comma separated list of field to compute for each MRU. Only secondaryField is supported for now."
+        required: false
+        schema:
+          type: "string"
+          pattern: "^.+(,.+)*$"
+        example: "secondaryField"
+      - name: "networkId"
+        in: "query"
+        description: "Specifies one or more unique identifiers for the community(ies) that the question to return is associated to. Specify multiple communities using a comma-separated list."
+        required: false
+        schema:
+          type: "string"
+          pattern: ".{18}"
+        example: "0DBX01D5F68R9E"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/200"
+        400:
+          description: "Invalid input"
+    post:
+      summary: "Loads user's MRUs"
+      security:
+        - BearerAuth: []
+      description: ""
+      parameters:
+        - name: "sobject"
+          in: "query"
+          description: "The comma separated list of objects that the MRU are scoped to, such as Account or offer__c. All MRUs of all types are fetched by default"
+          required: false
+          schema:
+            type: "string"
+            pattern: "^.+(,.+)*$"
+          examples:
+            oneItem:
+              value: "Account"
+            multipleItems:
+              value: "Account,Work"
+        - name: "limit"
+          in: "query"
+          description: "The number of results to return"
+          required: false
+          schema:
+            type: "integer"
+            minimum: 1
+            maximum: 200
+            default: 200
+          example: 100
+        - name: "dynamicFields"
+          in: "query"
+          description: "A comma separated list of field to compute for each MRU. Only secondaryField is supported for now."
+          required: false
+          schema:
+            type: "string"
+            pattern: "^.+(,.+)*$"
+          example: "secondaryField"
+        - name: "networkId"
+          in: "query"
+          description: "Specifies one or more unique identifiers for the community(ies) that the question to return is associated to. Specify multiple communities using a comma-separated list."
+          required: false
+          schema:
+            type: "string"
+            pattern: ".{18}"
+          example: "0DBX01D5F68R9E"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/200"
+        400:
+          description: "Invalid input"
+components:
+  schemas:
+    200:
+      type: "object"
+      required:
+      - records
+      properties:
+        records:
+          type: "array"
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/CaseRecordItem"
+              - $ref: "#/components/schemas/ContactRecordItem"
+        meta:
+          $ref: "#/components/schemas/Meta"
+    RecordItem:
+      type: "object"
+      required:
+      - id
+      - attributes
+      properties:
+        attributes:
+          type: "object"
+          properties:
+            type:
+              type: "string"
+              description: "The entity api name"
+            url:
+              type: "string"
+              example: "/services/data/v44.0/sobjects/Xxx/KprB0000003ygxsIAA"
+        Id:
+          type: "string"
+          example: "500bndf9908uygxsIAA"
+    CaseRecordItem:
+      description: "Example of a Case record"
+      allOf:
+      - $ref: "#/components/schemas/RecordItem"
+      - type: "object"
+        properties:
+          CaseNumber:
+            type: "string"
+            example: "01481851"
+            description: "This is the name field of this entity, its name depends on the entity"
+          Subject:
+            type: "string"
+            example: "This is the case subject"
+            description: "The secondary field name depends on the entity and its search layout"
+    ContactRecordItem:
+      description: "Example of a Contact record, with no secondary field found"
+      allOf:
+      - $ref: "#/components/schemas/RecordItem"
+      - type: "object"
+        properties:
+          Name:
+            type: "string"
+            example: "John Doe"
+            description: "This is the name field of this entity, its name depends on the entity"
+    Meta:
+      type: "object"
+      properties:
+        secondaryFields:
+          type: "array"
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/MetaSecondaryField"
+    MetaSecondaryField:
+      type: "object"
+      required:
+      - entityApiName
+      - fieldApiName
+      - type
+      properties:
+        entityApiName:
+          type: "string"
+          example: "Case"
+        fieldApiName:
+          type: "string"
+          example: "Subject"
+        "type":
+          type: "string"
+          example: "TEXT"
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

@@ -1,5 +1,6 @@
 import * as path from 'path';
 import {exec, ExecException} from 'child_process';
+import {Command} from 'commander';
 
 interface CliOutput {
     code: number;
@@ -44,5 +45,9 @@ export class TestCliUtils {
                     });
                 });
         });
+    }
+
+    public static runCommand(mainCommand: Command, command: string, ...args: string[]): void {
+        mainCommand.parse(['ts-node', './src/main/index.ts', command, ...args]);
     }
 }

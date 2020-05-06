@@ -50,6 +50,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "@apidevtools/swagger-parser": "^9.0.1",
     "chalk": "^3.0.0",
     "clear": "^0.1.0",
     "commander": "^4.1.1",

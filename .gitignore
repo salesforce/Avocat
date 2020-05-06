@@ -64,3 +64,6 @@ typings/
 # IDE directories
 .vscode/
 .idea/
+
+# Local store files
+local-store/

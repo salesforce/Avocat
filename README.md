@@ -29,6 +29,14 @@ Avocat installation is a simple process. It won't take too much of your time :)
 
 ### Installation
 - Clone this git repository into a local directory
+    ```sh
+        $ git clone git@git.soma.salesforce.com:searchdev/avocat.git
+    ```
+
+- Open it
+    ```sh
+        $ cd avocat
+    ```
 
 - Install npm dependencies
     ```sh
@@ -78,12 +86,12 @@ Before you start using avocat, make sure you've installed it globally, otherwise
 
 ### CLI Commands
 
-- **CLI::status** <br/>
+- **status** <br/>
     This command allows you check if there is pending changes in your local repositories. It takes no parameters or options. <br/>
     e.g. ``` $ avocat status ``` <br/>
     *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI%3A%3Astatus).*
 
-- **CLI::import** <br/>
+- **import** <br/>
     This command allows you to import new contract version into local avocat repository. It takes one parameter which is your contract file. <br/>
     e.g. ``` $ avocat import <contract_path> ``` <br/>
     *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI%3A%3Aimport).*
