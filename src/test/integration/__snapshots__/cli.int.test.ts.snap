@@ -1,48 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CLI Test Help Command Test When running avocat with long help option Shows available options and commands 1`] = `
+exports[`CLI Test Help Command Test When running avocat with help option Shows available options and commands 1`] = `
 "Usage: avocat [command] [options]
 
 🥑 Continuous contract testing for HTTP APIs
 
 Options:
-  -v, --version  Avocat current version
-  -h, --help     Show available commands/options
+  -v, --version           Avocat current version
+  -h, --help              Show available commands/options
 
 Commands:
-  status"
+  status
+  import <contract_path>"
 `;
-
-exports[`CLI Test Help Command Test When running avocat with no arguments Shows available options and commands 1`] = `
-"_                                     _   
-    / \\\\    __   __   ___     ___    __ _  | |_ 
-   / _ \\\\   \\\\ \\\\ / /  / _ \\\\   / __|  / _\` | | __|
-  / ___ \\\\   \\\\ V /  | (_) | | (__  | (_| | | |_ 
- /_/   \\\\_\\\\   \\\\_/    \\\\___/   \\\\___|  \\\\__,_|  \\\\__|
-                                               
-Usage: avocat [command] [options]
-
-🥑 Continuous contract testing for HTTP APIs
-
-Options:
-  -v, --version  Avocat current version
-  -h, --help     Show available commands/options
-
-Commands:
-  status"
-`;
-
-exports[`CLI Test Help Command Test When running avocat with short help option Shows available options and commands 1`] = `
-"Usage: avocat [command] [options]
-
-🥑 Continuous contract testing for HTTP APIs
-
-Options:
-  -v, --version  Avocat current version
-  -h, --help     Show available commands/options
-
-Commands:
-  status"
-`;
-
-exports[`CLI Test Status Command Test When running avocat status Shows status message 1`] = `"👌 Everything is up-to-date. No pending changes!"`;
