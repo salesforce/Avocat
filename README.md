@@ -45,7 +45,7 @@ Avocat installation is a simple process. It won't take too much of your time :)
 
 - Install Avocat globally
   ```sh
-      $ npm run install:global  
+      $ npm r -g avocat && npm i -g
   ```
   
 - That's it! You can start Avocat
@@ -146,7 +146,7 @@ We've added some custom scripts that might be useful when coding in Avocat.
 ## Supported Contract Formats
 | Format | Status |
 | ------ | ------ |
-| YAML | In progress |
+| OpenAPI | In progress |
 | RAML | Not supported |
 | JSON | Not supported |
 | XML  | Not supported |

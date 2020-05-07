@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "tsc -p .",
-    "install:global": "npm run build && npm i -g && avocat",
+    "prepare": "npm run build && mkdir -p ./local-store",
     "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
     "test": "jest src/ --config jest.config.js --runInBand",
     "test:updateSnapshot": "jest src/ --config jest.config.js --runInBand --updateSnapshot",
