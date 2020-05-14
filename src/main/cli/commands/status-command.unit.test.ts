@@ -30,7 +30,7 @@ describe('Status command test', () => {
             statusServiceMock.getChangeList = jest.fn(() => Promise.resolve([]));
 
             sut.includeInCLI(mainCommand);
-            TestCliUtils.runCommand(mainCommand, sut.name);
+            TestCliUtils.runCommandFromCommander(mainCommand, sut.name);
 
             expect(statusServiceMock.getChangeList).toHaveBeenCalledTimes(1);
         });
@@ -43,7 +43,7 @@ describe('Status command test', () => {
             ]));
 
             sut.includeInCLI(mainCommand);
-            TestCliUtils.runCommand(mainCommand, sut.name);
+            TestCliUtils.runCommandFromCommander(mainCommand, sut.name);
 
             expect(statusServiceMock.getChangeList).toHaveBeenCalledTimes(1);
         });
@@ -57,7 +57,7 @@ describe('Status command test', () => {
             ]));
 
             sut.includeInCLI(mainCommand);
-            TestCliUtils.runCommand(mainCommand, sut.name);
+            TestCliUtils.runCommandFromCommander(mainCommand, sut.name);
 
             expect(statusServiceMock.getChangeList).toHaveBeenCalledTimes(1);
         });

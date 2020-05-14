@@ -38,7 +38,7 @@ describe('Import command test', () => {
                 }));
 
             sut.includeInCLI(mainCommand);
-            TestCliUtils.runCommand(mainCommand, sut.name, 'dummy_contract_path');
+            TestCliUtils.runCommandFromCommander(mainCommand, sut.name, 'dummy_contract_path');
 
             expect(importServiceMock.importContract).toHaveBeenCalledTimes(1);
         });
