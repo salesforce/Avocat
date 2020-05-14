@@ -6,14 +6,15 @@ import {ContractParser} from '../parsing/contract-parser';
 import ContractJsonSerializer from './serializer/json/contract-json-serializer';
 import {ContractSerializer} from './serializer/contract-serializer';
 import fs from 'fs';
+import path from 'path';
 
 @Service('file-store-contract.repository')
 export class FileStoreContractRepository implements ContractRepository {
-    public readonly FILE_REPOSITORY_DIR = './local-store/';
 
     constructor(@Inject('fs') private fileSystem: typeof fs,
                 @Inject(() => SwaggerContractParser) private contractParser: ContractParser,
-                @Inject(() => ContractJsonSerializer) private contractSerializer: ContractSerializer) {
+                @Inject(() => ContractJsonSerializer) private contractSerializer: ContractSerializer,
+                @Inject('store-dir') private readonly storeDir: string) {
     }
 
     public async import(contractPath: string): Promise<Contract> {
@@ -29,12 +30,12 @@ export class FileStoreContractRepository implements ContractRepository {
     }
 
     private getContractDir(contractName: string): string {
-        return this.FILE_REPOSITORY_DIR + contractName + '/';
+        return path.join(this.storeDir, contractName);
     }
 
-    private async createFileAndDirectories(path: string, name: string, content: string): Promise<void> {
-        await this.fileSystem.promises.mkdir(path, {recursive: true});
-        return this.fileSystem.promises.writeFile(path + '/' + name, content, {encoding: 'utf8'});
+    private async createFileAndDirectories(pathToFile: string, name: string, content: string): Promise<void> {
+        await this.fileSystem.promises.mkdir(pathToFile, {recursive: true});
+        return this.fileSystem.promises.writeFile(path.join(pathToFile, name), content, {encoding: 'utf8'});
     }
 
     public async findAllNamesAndVersions(): Promise<Contract[]> {
@@ -45,11 +46,11 @@ export class FileStoreContractRepository implements ContractRepository {
     }
 
     private loadAllContracts(): Promise<string[]> {
-        return this.readDirectory(this.FILE_REPOSITORY_DIR);
+        return this.readDirectory(this.storeDir);
     }
 
     private loadAllVersions = async (contractName: string): Promise<Contract[]> => {
-        const versions = await this.readDirectory(this.FILE_REPOSITORY_DIR + contractName);
+        const versions = await this.readDirectory(path.join(this.storeDir, contractName));
         return ContractMapper.mapToContractList(contractName, versions);
     };
 

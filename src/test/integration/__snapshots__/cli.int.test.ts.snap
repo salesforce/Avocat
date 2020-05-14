@@ -13,3 +13,12 @@ Commands:
   status
   import <contract_path>"
 `;
+
+exports[`CLI Test Import Command Test When running avocat with import command and a valid contract path Shows the message that a contract(name, version) was imported 1`] = `"🤝 Contract TEST_SAMPLE_CONTRACT imported for version 2.2.2, everything's fine."`;
+
+exports[`CLI Test Import Command Test When running avocat with status command after a contract was imported Shows the message that a contract is pending 1`] = `
+"👉 One contract is pending:
+    * TEST_SAMPLE_CONTRACT, version 2.2.2"
+`;
+
+exports[`CLI Test Status Command Test When running avocat with status command and there is no pending changes Shows the message no pending changes 1`] = `"👌 Everything is up-to-date. No pending changes!"`;

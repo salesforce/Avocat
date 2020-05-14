@@ -66,4 +66,4 @@ typings/
 .idea/
 
 # Local store files
-local-store/
+.tmp/

@@ -4,13 +4,12 @@ import {Command} from 'commander';
 describe('Test CLI Utils', () => {
 
     beforeAll(() => {
-        const INTEGRATION_TEST_TIMEOUT = 30000;
-        jest.setTimeout(INTEGRATION_TEST_TIMEOUT);
+        TestCliUtils.prepareIntegrationTest();
     });
 
     describe('When the command is executed successfully', () => {
         it('Should return stdout with code 0', async () => {
-            const result = await TestCliUtils.transpileAndRunAvocatFromCLI(['node']);
+            const result = await TestCliUtils.transpileAndRunAvocatFromCLI(['-v']);
 
             expect(result).not.toBeUndefined();
             expect(result.code).toBe(0);
@@ -30,7 +29,7 @@ describe('Test CLI Utils', () => {
             const mainCommand: Command = jest.genMockFromModule('commander');
             mainCommand.parse = jest.fn();
 
-            TestCliUtils.runCommand(mainCommand, 'ls');
+            TestCliUtils.runCommandFromCommander(mainCommand, 'ls');
 
             expect(mainCommand.parse).toHaveBeenCalledTimes(1);
         });

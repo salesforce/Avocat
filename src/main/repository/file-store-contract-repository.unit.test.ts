@@ -19,7 +19,7 @@ describe('File Store Contract repository test', () => {
         fileSystemMock.promises = jest.genMockFromModule('fs');
         swaggerContractParserMock = jest.genMockFromModule('../parsing/swagger/swagger-contract-parser');
         contractJsonSerializerMock = jest.genMockFromModule('./serializer/contract-serializer');
-        sut = new FileStoreContractRepository(fileSystemMock, swaggerContractParserMock, contractJsonSerializerMock);
+        sut = new FileStoreContractRepository(fileSystemMock, swaggerContractParserMock, contractJsonSerializerMock, 'FAKE_STORE_DIR');
     });
 
     describe('When import is called with a valid swagger contract path', () => {
