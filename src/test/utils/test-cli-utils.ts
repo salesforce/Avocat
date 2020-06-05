@@ -69,4 +69,8 @@ export class TestCliUtils {
         const rmdirPromise = promisify(rmdirRecursive);
         return rmdirPromise(this.TEST_STORE_DIR);
     }
+
+    public static async* generatorMock<T>(list: T): AsyncGenerator<T> {
+        yield list;
+    }
 }

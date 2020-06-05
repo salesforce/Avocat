@@ -1,7 +1,7 @@
 /* The following line is important for the dependency injection TypeDI "import 'reflect-metadata'"*/
 import 'reflect-metadata';
 import {Inject, Service} from 'typedi';
-import {FileStoreContractRepository} from '../../repository/file-store-contract-repository';
+import {FileStoreContractRepository} from '../../infrastructure/repository/file-store-contract-repository';
 import {ContractRepository} from '../contract/contract-repository';
 import {Contract} from '../contract/model/contract';
 
@@ -12,6 +12,6 @@ export default class StatusService {
     }
 
     public async getChangeList(): Promise<Contract[]> {
-        return this.contractRepository.findAllNamesAndVersions();
+        return this.contractRepository.findAll();
     }
 }

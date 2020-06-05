@@ -6,12 +6,13 @@ exports[`CLI Test Help Command Test When running avocat with help option Shows a
 🥑 Continuous contract testing for HTTP APIs
 
 Options:
-  -v, --version           Avocat current version
+  -V, --Version           Avocat current version
   -h, --help              Show available commands/options
 
 Commands:
   status
-  import <contract_path>"
+  import <contract_path>
+  test [options]"
 `;
 
 exports[`CLI Test Import Command Test When running avocat with import command and a valid contract path Shows the message that a contract(name, version) was imported 1`] = `"🤝 Contract TEST_SAMPLE_CONTRACT imported for version 2.2.2, everything's fine."`;
