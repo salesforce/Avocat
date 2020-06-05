@@ -5,5 +5,11 @@ export interface ContractRepository {
 
     save(contract: Contract): Promise<string>;
 
-    findAllNamesAndVersions(): Promise<Contract[]>;
+    findAll(): Promise<Contract[]>;
+
+    findByName(name: string): Promise<Contract[]>;
+
+    findByVersion(version: string): Promise<Contract[]>;
+
+    findByNameAndVersion(name: string, version: string): Promise<Contract>;
 }

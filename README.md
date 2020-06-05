@@ -9,7 +9,7 @@ Avocat is a continuous contract testing tool for HTTP APIs. It allows running in
     1. [ Prerequisites ](#prerequisites)
     2. [ Installation ](#installation)
 2. [ Running Tests ](#running-tests)
-    1. [ Unit Tests ](#run-unit-tests)
+    1. [ Unit Tests ](#run-tests)
     2. [ Code Coverage ](#run-code-coverage)
     3. [ Code Conformance ](#run-code-conformance)
 3. [ Usage ](#usage)
@@ -17,11 +17,10 @@ Avocat is a continuous contract testing tool for HTTP APIs. It allows running in
     2. [ Start Coding ](#start-coding)
     3. [ Additional Scripts ](#additional-scripts)
 4. [ Authors ](#authors)
-3. [ Licence ](#licence)
 
 
 ## Getting Started
-Avocat installation is a simple process. It won't take too much of your time :)
+Avocat installation is a simple process. It won't take too much of your time 😉
 
 ### Prerequisites
 - npm version >=6.12.1
@@ -54,10 +53,10 @@ Avocat installation is a simple process. It won't take too much of your time :)
     ```
 
 ## Running tests
-Trust is our first value, and to do so, we have strict quality checks and metrics.
+Trust is our number one value. We have strict quality checks and metrics to ensure it is always respected.
 
-### Run unit tests
-- We use Jest to write unit tests, you can run them easily with
+### Run tests
+- We use Jest to write tests, you can run them easily with
     ```sh
         $ npm test   
     ```
@@ -92,14 +91,39 @@ Before you start using avocat, make sure you've installed it globally, otherwise
     *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI%3A%3Astatus).*
 
 - **import** <br/>
-    This command allows you to import new contract version into local avocat repository. It takes one parameter which is your contract file. <br/>
-    e.g. ``` $ avocat import <contract_path> ``` <br/>
-    *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI%3A%3Aimport).*
+    This command allows you to import new contract version into local repository. It takes one parameter which is your contract file. <br/>
+    e.g. ``` $ avocat import '/path/to/contract' ``` <br/>
+    *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI%3A%3Aimport).*<br/>
     
+    **Note that the import command uses the directory ~/.avocat as the default local store.**
+    In case you need to override it, please set the AVOCAT_STORE_DIR environment variable with the desired directory value.<br/> 
+    e.g. ``` $ export AVOCAT_STORE_DIR='/path/to/store'  ```
+- **test** <br/> 
+    This command allows you to validate contracts in your local repository. 
+    You need to add some options to specify contracts on which you're running validations.<br/>
+
+    Available options:
+    * url (required): Server url in which the APIs are hosted e.g. https://www.example.com/
+    * name (optional): Specify a contract name to run tests on e.g. "Search Mru"
+    * version (optional): Specify a contract version to run tests on e.g. 49
+   
+    Behaviour:
+    * When only a contract name option is provided, tests will be run on all the contract versions
+    * When only a contract version option is provided, tests will be run on all the contracts having the provided version
+    * When both name and version options are provided, tests will be run on contract’s specified version only
+    * When neither name nor version are provided, an error message will be displayed "Insufficient criteria"
+    
+    e.g. ``` $ avocat test --url http://www.example.com/services --name 'My Contract' --version 2.1``` <br/>
+    *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI::test).* <br/>
+    
+    **Note that the test command uses the SID environment variable to get the Bearer authorization token.** 
+    Please update it with a valid token before you start testing. 
+    However, more authentication types will be implemented in the future. <br/>
+    e.g. ``` $ export SID='This is a valid token' ```
+       
 - CLI::amend
 - CLI::pull
 - CLI::push
-- CLI::test
 - CLI::reveng
 
 ### Start coding
@@ -108,11 +132,12 @@ This section describes our code files structure.
 #### Source code files
 Could be found in avocat/src directory. <br/>
 ```
-    |_ main             # source code and unit tests        
-      |_ cli            # commands UX management            
-      |_ core           # avocat business logic             
-    |_ index.ts         # loads CliApp and runs avocat      
-    |_ test             # integration tests and test utils 
+    |_ main               # source code and unit tests        
+      |_ app              # commands UX management            
+      |_ core             # avocat business logic  
+      |_ infrastructure   # repositories and 3rd party calls         
+    |_ index.ts           # loads CliApp and runs avocat      
+    |_ test               # integration tests and test utils 
 ```
 
 #### Config files
@@ -152,8 +177,4 @@ We've added some custom scripts that might be useful when coding in Avocat.
 | XML  | Not supported |
 
 ## Authors
-[SPEP Team](https://gus.lightning.force.com/lightning/r/ADM_Scrum_Team__c/a00B0000000wkIzIAI/view). Salesforce, Grenoble site
-
-
-## Licence
-TODO
+[SPEP Team](https://gus.lightning.force.com/lightning/r/ADM_Scrum_Team__c/a00B0000000wkIzIAI/view). Salesforce, Grenoble

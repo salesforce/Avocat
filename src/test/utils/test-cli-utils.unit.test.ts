@@ -9,7 +9,7 @@ describe('Test CLI Utils', () => {
 
     describe('When the command is executed successfully', () => {
         it('Should return stdout with code 0', async () => {
-            const result = await TestCliUtils.transpileAndRunAvocatFromCLI(['-v']);
+            const result = await TestCliUtils.transpileAndRunAvocatFromCLI(['-V']);
 
             expect(result).not.toBeUndefined();
             expect(result.code).toBe(0);

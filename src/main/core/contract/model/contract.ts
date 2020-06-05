@@ -10,17 +10,5 @@ export interface Contract {
     endpoints: Endpoint[];
 }
 
-export class ContractMapper {
-    public static mapToContractObject(name: string, version: string): Contract {
-        return {
-            name,
-            version,
-            status: ContractStatus.NOT_VERIFIED,
-            endpoints: []
-        };
-    }
-
-    public static mapToContractList(name: string, versions: string[]): Contract[] {
-        return versions.map(version => ContractMapper.mapToContractObject(name, version));
-    }
-}
+export const contractComparator = (c1: Contract, c2: Contract): number =>
+    c1.name.localeCompare(c2.name) || c1.version.localeCompare(c2.version);
