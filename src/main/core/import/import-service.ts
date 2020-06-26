@@ -4,14 +4,19 @@ import {Inject, Service} from 'typedi';
 import {Contract} from '../contract/model/contract';
 import {ContractRepository} from '../contract/contract-repository';
 import {FileStoreContractRepository} from '../../infrastructure/repository/file-store-contract-repository';
+import {EventEmitter} from 'events';
 
 @Service('import.service')
 export default class ImportService {
 
-    constructor(@Inject(() => FileStoreContractRepository) private contractRepository: ContractRepository) {
+    constructor(@Inject(() => FileStoreContractRepository) private contractRepository: ContractRepository,
+                @Inject('logging-event-emitter') private loggingEE: EventEmitter) {
     }
 
     public async importContract(contractPath: string): Promise<Contract> {
+        this.loggingEE.emit('trace');
+        this.loggingEE.emit('debug',`Contract in path '${contractPath}' is being imported...`);
+
         return this.contractRepository.import(contractPath);
     }
 }

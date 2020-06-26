@@ -7,6 +7,9 @@ exports[`CLI Test Help Command Test When running avocat with help option Shows a
 
 Options:
   -V, --Version           Avocat current version
+  --loglevel <level>      Specify the log level. Allowed values:
+                          TRACE|DEBUG|INFO|WARN|ERROR|SILENT (default:
+                          \\"SILENT\\")
   -h, --help              Show available commands/options
 
 Commands:

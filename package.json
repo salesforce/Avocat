@@ -46,6 +46,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^25.0.0",
     "nodemon": "^2.0.2",
+    "rimraf": "^3.0.2",
     "ts-jest": "^25.0.0",
     "ts-node": "^8.6.2",
     "typescript": "^3.8.3"
@@ -53,6 +54,7 @@
   "dependencies": {
     "@apidevtools/swagger-parser": "^9.0.1",
     "@types/cli-spinner": "^0.2.0",
+    "@types/loglevel": "^1.6.3",
     "ajv": "^6.12.2",
     "axios": "^0.19.2",
     "chalk": "^3.0.0",

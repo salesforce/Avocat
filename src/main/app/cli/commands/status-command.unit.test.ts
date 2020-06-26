@@ -3,15 +3,19 @@ import {Command} from 'commander';
 import {TestCliUtils} from '../../../../test/utils/test-cli-utils';
 import StatusService from '../../../core/status/status-service';
 import {ContractMapper} from '../../../core/contract/mapper/contract-mapper';
+import {EventEmitter} from 'events';
 
 describe('Status command test', () => {
     let sut: StatusCommand;
     let mainCommand: Command;
     let statusServiceMock: StatusService;
+    let loggingEventEmitterMock: EventEmitter;
 
     beforeEach(() => {
         statusServiceMock = jest.genMockFromModule('../../../core/status/status-service');
-        sut = new StatusCommand(statusServiceMock);
+        loggingEventEmitterMock = jest.genMockFromModule('events');
+        loggingEventEmitterMock.emit = jest.fn();
+        sut = new StatusCommand(statusServiceMock, loggingEventEmitterMock);
         mainCommand = new Command();
         mainCommand.description('testing status command');
     });

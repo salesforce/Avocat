@@ -1,10 +1,12 @@
 import {AjvContractValidator} from './ajv-contract-validator';
 import {HttpStatusCode} from '../../../core/contract/enums/http-status-code';
-import {ValidationResult} from '../../../core/validator/model/validation-result';
-import {ValidationAttempt} from '../../../core/validator/model/validation-attempt';
+import {ValidationResult} from '../../../core/validation/model/validation-result';
+import {ValidationAttempt} from '../../../core/validation/model/validation-attempt';
 import {HttpResponse} from '../../../core/http/model/http-response';
+import {EventEmitter} from 'events';
 
 describe('AJV Contract Validator test', () => {
+    let loggingEventEmitterMock: EventEmitter;
     let sut: AjvContractValidator;
     const validResponse: HttpResponse = {statusCode: HttpStatusCode.SUCCESS, payload: {p1: 55}};
     const invalidResponseSchema: HttpResponse = {statusCode: HttpStatusCode.SUCCESS, payload: {p1: '55'}};
@@ -12,7 +14,9 @@ describe('AJV Contract Validator test', () => {
     const schema = {type: 'object', properties: {p1: {type: 'number'}}};
 
     beforeEach(() => {
-        sut = new AjvContractValidator();
+        loggingEventEmitterMock = jest.genMockFromModule('events');
+        loggingEventEmitterMock.emit = jest.fn();
+        sut = new AjvContractValidator(loggingEventEmitterMock);
     });
 
     describe('When validate is called with an object that corresponds to the schema', () => {

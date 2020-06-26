@@ -3,8 +3,9 @@ import {TestCommand} from './test-command';
 import {AvocatCommandOption} from '../model/avocat-command-option';
 import {TestCliUtils} from '../../../../test/utils/test-cli-utils';
 import {Spinner} from 'cli-spinner';
-import {ValidatorService} from '../../../core/validator/validator-service';
+import {ValidatorService} from '../../../core/validation/validator-service';
 import {ValidationResultRenderer} from '../rendering/validation-result-renderer';
+import {EventEmitter} from 'events';
 
 describe('Test command test', () => {
     let sut: TestCommand;
@@ -12,19 +13,22 @@ describe('Test command test', () => {
     let validatorServiceMock: ValidatorService;
     let validatorResultRenderer: ValidationResultRenderer;
     let spinnerMock: Spinner;
+    let loggingEventEmitterMock: EventEmitter;
     const FAKE_URL = 'FAKE_URL';
     const FAKE_NAME = 'FAKE_NAME';
     const FAKE_VERSION = 'FAKE_VERSION';
 
     beforeEach(() => {
-        validatorServiceMock = jest.genMockFromModule('../../../core/validator/validator-service');
-        validatorResultRenderer = new ValidationResultRenderer(console);
+        loggingEventEmitterMock = jest.genMockFromModule('events');
+        loggingEventEmitterMock.emit = jest.fn();
+        validatorServiceMock = jest.genMockFromModule('../../../core/validation/validator-service');
+        validatorResultRenderer = new ValidationResultRenderer(console, loggingEventEmitterMock);
         spinnerMock = jest.genMockFromModule('cli-spinner');
         spinnerMock.setSpinnerTitle = jest.fn();
         spinnerMock.setSpinnerString = jest.fn();
         spinnerMock.start = jest.fn();
         spinnerMock.stop = jest.fn();
-        sut = new TestCommand(validatorServiceMock, validatorResultRenderer, spinnerMock);
+        sut = new TestCommand(validatorServiceMock, validatorResultRenderer, spinnerMock, loggingEventEmitterMock);
         mainCommand = new Command();
         mainCommand.description('testing test command');
     });

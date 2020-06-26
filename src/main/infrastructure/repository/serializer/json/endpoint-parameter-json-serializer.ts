@@ -2,7 +2,7 @@ import {EndpointParameter} from '../../../../core/contract/model/endpoint-parame
 import {Service} from 'typedi';
 
 @Service('endpoint-parameter-json.serializer')
-export default class EndpointResponseJsonSerializerEndpointParameterJsonSerializer {
+export default class EndpointParameterJsonSerializer {
 
     public serialize(endpointParameter: EndpointParameter): object {
         return {

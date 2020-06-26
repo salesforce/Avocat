@@ -10,9 +10,14 @@ import path from 'path';
 import axios from 'axios';
 import {AxiosConfig} from './app/config/axios-config';
 import {Spinner} from 'cli-spinner';
+import {getLogger} from 'loglevel';
+import {EventEmitter} from 'events';
 
 const DEFAULT_STORE_DIR = os.homedir() + '/.avocat';
 const storeDir = process.env.AVOCAT_STORE_DIR || DEFAULT_STORE_DIR;
+
+const logger = getLogger('logger');
+logger.setDefaultLevel('SILENT');
 
 const appContext = new ApplicationContext();
 appContext.set([
@@ -20,9 +25,13 @@ appContext.set([
     {id: 'fs', value: fileSystem},
     {id: 'axios', value: axios.create(AxiosConfig)},
     {id: 'spinner', value: new Spinner()},
-    {id: 'output-stream', value: console}
+    {id: 'output-stream', value: console},
+    {id: 'logger', value: logger},
+    {id: 'logging-event-emitter', value: new EventEmitter()},
 ]);
-appContext.prepareStore();
+appContext
+    .prepareStore()
+    .prepareLogger();
 
 const app = Container.get(CliApp);
 app.run(process.argv, version);
