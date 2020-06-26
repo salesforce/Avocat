@@ -3,15 +3,19 @@ import ImportCommand from './import-command';
 import {ContractStatus} from '../../../core/contract/enums/contract-status';
 import {TestCliUtils} from '../../../../test/utils/test-cli-utils';
 import ImportService from '../../../core/import/import-service';
+import {EventEmitter} from 'events';
 
 describe('Import command test', () => {
     let sut: ImportCommand;
     let mainCommand: Command;
     let importServiceMock: ImportService;
+    let loggingEventEmitterMock: EventEmitter;
 
     beforeEach(() => {
         importServiceMock = jest.genMockFromModule('../../../core/import/import-service');
-        sut = new ImportCommand(importServiceMock);
+        loggingEventEmitterMock = jest.genMockFromModule('events');
+        loggingEventEmitterMock.emit = jest.fn();
+        sut = new ImportCommand(importServiceMock, loggingEventEmitterMock);
         mainCommand = new Command();
         mainCommand.description('testing import command');
     });

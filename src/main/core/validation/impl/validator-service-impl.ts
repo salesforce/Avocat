@@ -17,41 +17,65 @@ import {EndpointResponse} from '../../contract/model/endpoint-response';
 import {NotImplementedError} from '../../error/not-implemented-error';
 import {ValidatorService} from '../validator-service';
 import {ValidationAttempt} from '../model/validation-attempt';
+import {EventEmitter} from 'events';
 
 @Service('validator.service')
 export class ValidatorServiceImpl implements ValidatorService {
 
     constructor(@Inject(() => FileStoreContractRepository) private contractRepository: ContractRepository,
                 @Inject(() => AjvContractValidator) private contractValidator: ContractValidator,
-                @Inject(() => AxiosHttpClient) private httpClient: HttpClient) {
+                @Inject(() => AxiosHttpClient) private httpClient: HttpClient,
+                @Inject('logging-event-emitter') private loggingEE: EventEmitter) {
     }
 
     public async* validateContractHavingNameAndVersion(hostURL: string, contractName: string, contractVersion: string): AsyncGenerator<ValidationResult[]> {
+        this.loggingEE.emit('trace');
+        this.loggingEE.emit('debug', `Looking for contract having name '${contractName}' and version '${contractVersion}'...`);
+
         const loadedContract = await this.contractRepository.findByNameAndVersion(contractName, contractVersion);
+        this.loggingEE.emit('info', `Contract '${loadedContract.name}' loaded!`);
+
         yield this.validateContract(hostURL, loadedContract);
     }
 
     public async* validateContractsHavingVersion(hostURL: string, contractVersion: string): AsyncGenerator<ValidationResult[]> {
+        this.loggingEE.emit('trace');
+        this.loggingEE.emit('debug', `Looking for contracts having version '${contractVersion}'...`);
+
         const contractsList = await this.contractRepository.findByVersion(contractVersion);
+        contractsList.forEach(contract =>
+            this.loggingEE.emit('debug', `Contract '${contract.name}' version ${contract.version} found!`));
+
         for await (const loadedContract of this.loadContractsContents(contractsList)) {
+            this.loggingEE.emit('info', `Contract '${loadedContract.name}' version ${loadedContract.version} loaded!`);
             yield this.validateContract(hostURL, loadedContract);
         }
     }
 
     public async* validateContractHavingName(hostURL: string, contractName: string): AsyncGenerator<ValidationResult[]> {
+        this.loggingEE.emit('trace');
+        this.loggingEE.emit('debug', `Looking for contracts having name '${contractName}'...`);
+
         const contractsList = await this.contractRepository.findByName(contractName);
+        contractsList.forEach(contract =>
+            this.loggingEE.emit('debug', `Contract '${contract.name}' version ${contract.version} found!`));
+
         for await (const loadedContract of this.loadContractsContents(contractsList)) {
+            this.loggingEE.emit('info', `Contract '${loadedContract.name}' version ${loadedContract.version} loaded!`);
             yield this.validateContract(hostURL, loadedContract);
         }
     }
 
     private async* loadContractsContents(contractsList: Contract[]): AsyncGenerator<Contract> {
         for (const contract of contractsList) {
+            this.loggingEE.emit('debug', `Loading contract '${contract.name}' version ${contract.version}...`);
             yield this.contractRepository.findByNameAndVersion(contract.name, contract.version);
         }
     }
 
     private validateContract(hostURL: string, contract: Contract): Promise<ValidationResult[]> {
+        this.loggingEE.emit('info', `Running validation for the contract '${contract.name}' v'${contract.version}' on the host '${hostURL}'`);
+
         const metadataBuilder = new ValidationMetadataBuilder(hostURL, contract);
         return Promise.all(this.validateEndpoints(contract.endpoints, metadataBuilder));
     }
@@ -64,6 +88,8 @@ export class ValidatorServiceImpl implements ValidatorService {
     };
 
     private validateEndpoint = (endpoint: Endpoint, metadataBuilder: ValidationMetadataBuilder): Promise<ValidationResult>[] => {
+        this.loggingEE.emit('debug', `Running validation for the endpoint '${endpoint.path}'`);
+
         metadataBuilder
             .withPath(endpoint.path);
         const validationResultNestedList: Promise<ValidationResult>[][] = endpoint.endpointMethods
@@ -76,6 +102,8 @@ export class ValidatorServiceImpl implements ValidatorService {
         Array.prototype.concat(...validationResultNestedList);
 
     private validateEndpointMethod(endpointMethod: EndpointMethod, metadataBuilder: ValidationMetadataBuilder): Promise<ValidationResult>[] {
+        this.loggingEE.emit('debug', `Running validation for the endpointMethod '${endpointMethod.method}'`);
+
         const responsesValidationResults: Promise<ValidationResult>[] = [];
         for (const [statusCode, endpointResponse] of Object.entries(endpointMethod.responsesSchemas)) {
             const metadata = metadataBuilder
@@ -89,18 +117,29 @@ export class ValidatorServiceImpl implements ValidatorService {
         return responsesValidationResults;
     }
 
-    private validateEndpointResponse = (endpointResponse: EndpointResponse, metadata: ValidationMetadata): Promise<ValidationResult> =>
-        this.callAPI(metadata)
+    private validateEndpointResponse = (endpointResponse: EndpointResponse, metadata: ValidationMetadata): Promise<ValidationResult> => {
+        this.loggingEE.emit('debug', `Running validation for the endpointResponse '${metadata.statusCode}'`);
+
+        return this.callAPI(metadata)
             .then(httpResponse =>
                 this.contractValidator.validate(new ValidationAttempt(metadata.statusCode, endpointResponse.schema, httpResponse))
             )
-            .then(validationResult => ({
-                ...validationResult,
-                metadata: metadata
-            }))
-            .catch(apiError =>
-                ({metadata, valid: false, errors: [apiError.message]})
-            );
+            .then(validationResult => this.handleAPIResponse(validationResult, metadata))
+            .catch(apiError => this.handleAPIError(apiError, metadata));
+    }
+
+    private handleAPIResponse = (validationResult: ValidationResult, metadata: ValidationMetadata): ValidationResult => {
+        this.loggingEE.emit('info', `EndpointResponse '${metadata.statusCode}' ${validationResult.valid ? 'validated' : 'is not valid' }!`);
+        return {
+            ...validationResult,
+            metadata: metadata
+        };
+    };
+
+    private handleAPIError = (apiError: Error, metadata: ValidationMetadata): ValidationResult => {
+        this.loggingEE.emit('error', `EndpointResponse '${metadata.statusCode}' validation result: Error calling API: '${apiError.message}'`);
+        return {metadata, valid: false, errors: [apiError.message]};
+    };
 
     private async callAPI(metadata: ValidationMetadata): Promise<HttpResponse> {
         if (metadata.method === HttpMethod.GET) {

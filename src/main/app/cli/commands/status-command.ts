@@ -5,6 +5,7 @@ import {AvocatCommand} from '../model/avocat-command';
 import {Inject, Service} from 'typedi';
 import StatusService from '../../../core/status/status-service';
 import {Contract} from '../../../core/contract/model/contract';
+import {EventEmitter} from 'events';
 
 @Service('status.command')
 export default class StatusCommand implements AvocatCommand {
@@ -12,7 +13,8 @@ export default class StatusCommand implements AvocatCommand {
     public readonly name = 'status';
     public readonly options = [];
 
-    constructor(@Inject('status.service') private statusService: StatusService) {
+    constructor(@Inject('status.service') private statusService: StatusService,
+                @Inject('logging-event-emitter') private loggingEE: EventEmitter) {
     }
 
     public includeInCLI(mainCommand: Command): void {
@@ -22,6 +24,9 @@ export default class StatusCommand implements AvocatCommand {
     }
 
     private async checkStatus(): Promise<void> {
+        this.loggingEE.emit('trace');
+        this.loggingEE.emit('info', 'Running Status command');
+
         const changeList: Contract[] = await this.statusService.getChangeList();
         if (changeList.length === 0) {
             console.log('👌 Everything is up-to-date. No pending changes!');

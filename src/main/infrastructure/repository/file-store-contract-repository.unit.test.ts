@@ -6,6 +6,7 @@ import {Contract} from '../../core/contract/model/contract';
 import fs from 'fs';
 import {ContractSerializer} from './serializer/contract-serializer';
 import {ContractMapper} from '../../core/contract/mapper/contract-mapper';
+import {EventEmitter} from 'events';
 
 describe('File Store Contract repository test', () => {
     const VERSION = 'v1';
@@ -15,6 +16,7 @@ describe('File Store Contract repository test', () => {
     let swaggerContractParserMock: ContractParser;
     let fileSystemMock: typeof fs;
     let contractJsonSerializerMock: ContractSerializer;
+    let loggingEventEmitterMock: EventEmitter;
     const contract1JsonFake = `
                 {
                   "name": "${CONTRACT_1_NAME}",
@@ -36,7 +38,15 @@ describe('File Store Contract repository test', () => {
         fileSystemMock.promises = jest.genMockFromModule('fs');
         swaggerContractParserMock = jest.genMockFromModule('../parser/swagger/swagger-contract-parser');
         contractJsonSerializerMock = jest.genMockFromModule('./serializer/contract-serializer');
-        sut = new FileStoreContractRepository(fileSystemMock, swaggerContractParserMock, contractJsonSerializerMock, 'FAKE_STORE_DIR');
+        loggingEventEmitterMock = jest.genMockFromModule('events');
+        loggingEventEmitterMock.emit = jest.fn();
+        sut = new FileStoreContractRepository(
+            fileSystemMock,
+            swaggerContractParserMock,
+            contractJsonSerializerMock,
+            'FAKE_STORE_DIR',
+            loggingEventEmitterMock
+        );
     });
 
     describe('When import is called with a valid swagger contract path', () => {

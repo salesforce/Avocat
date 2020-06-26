@@ -3,9 +3,11 @@ import {ParameterType} from '../../../core/contract/enums/parameter-type';
 import {AxiosInstance} from 'axios';
 import {HttpStatusCode} from '../../../core/contract/enums/http-status-code';
 import {HttpResponse} from '../../../core/http/model/http-response';
+import {EventEmitter} from 'events';
 
 describe('Axios Http Service test', () => {
     let axiosInstanceMock: AxiosInstance;
+    let loggingEventEmitterMock: EventEmitter;
     let sut: AxiosHttpClient;
     const parameterFake = {
         name: '',
@@ -23,7 +25,9 @@ describe('Axios Http Service test', () => {
 
     beforeEach(() => {
         axiosInstanceMock = jest.genMockFromModule('axios');
-        sut = new AxiosHttpClient(axiosInstanceMock);
+        loggingEventEmitterMock = jest.genMockFromModule('events');
+        loggingEventEmitterMock.emit = jest.fn();
+        sut = new AxiosHttpClient(axiosInstanceMock, loggingEventEmitterMock);
     });
 
     describe('When get method is called with a valid API url and list of parameters', () => {

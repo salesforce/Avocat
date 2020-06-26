@@ -6,11 +6,13 @@ import {HttpClient} from '../../http/http-client';
 import {HttpStatusCode} from '../../contract/enums/http-status-code';
 import {HttpMethod} from '../../contract/enums/http-method';
 import {ContractMapper} from '../../contract/mapper/contract-mapper';
+import {EventEmitter} from 'events';
 
 describe('Validator Service test', () => {
     let contractRepositoryMock: ContractRepository;
     let contractValidatorMock: ContractValidator;
     let httpServiceMock: HttpClient;
+    let loggingEventEmitterMock: EventEmitter;
     let sut: ValidatorServiceImpl;
 
     const contractName1 = 'contract 1 name';
@@ -93,7 +95,10 @@ describe('Validator Service test', () => {
         httpServiceMock = jest.genMockFromModule('../../http/http-client');
         httpServiceMock.get = jest.fn();
 
-        sut = new ValidatorServiceImpl(contractRepositoryMock, contractValidatorMock, httpServiceMock);
+        loggingEventEmitterMock = jest.genMockFromModule('events');
+        loggingEventEmitterMock.emit = jest.fn();
+
+        sut = new ValidatorServiceImpl(contractRepositoryMock, contractValidatorMock, httpServiceMock, loggingEventEmitterMock);
     });
 
     describe('When validateContractHavingNameAndVersion is called and there is a matching contract', () => {
@@ -137,6 +142,12 @@ describe('Validator Service test', () => {
 
     describe('When validateContractsHavingVersion is called and there are matching contracts', () => {
         it('Should run validation on all of contracts having versions that match', async () => {
+            (contractValidatorMock.validate as jest.Mock).mockImplementationOnce(() =>
+                Promise.resolve({
+                    valid: false,
+                    errors: ['Error calling API']
+                }));
+
             contractRepositoryMock.findByVersion = jest.fn()
                 .mockImplementationOnce(() => [
                     ContractMapper.mapNameAndVersionToContractObject(contractName1, version2),
@@ -149,7 +160,7 @@ describe('Validator Service test', () => {
             }
 
             expect(allValidatorResults).toMatchObject([
-                expectedValidResult('/mru1', HttpMethod.GET, HttpStatusCode.SUCCESS),
+                expectedInvalidResult('/mru1', HttpMethod.GET, HttpStatusCode.SUCCESS, ['Error calling API']),
                 expectedValidResult('/mru1', HttpMethod.GET, HttpStatusCode.BAD_REQUEST),
                 expectedInvalidResult('/mru1', HttpMethod.POST, HttpStatusCode.SUCCESS, ['Sorry!! http method POST is not implemented yet']),
                 expectedValidResult('/mru2', HttpMethod.GET, HttpStatusCode.SUCCESS),

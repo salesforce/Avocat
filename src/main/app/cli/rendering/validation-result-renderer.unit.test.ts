@@ -1,13 +1,15 @@
 import {ValidationResultRenderer} from './validation-result-renderer';
-import {ValidationResult} from '../../../core/validator/model/validation-result';
+import {ValidationResult} from '../../../core/validation/model/validation-result';
 import {HttpStatusCode} from '../../../core/contract/enums/http-status-code';
 import {HttpMethod} from '../../../core/contract/enums/http-method';
 import {ContractMapper} from '../../../core/contract/mapper/contract-mapper';
 import {TestCliUtils} from '../../../../test/utils/test-cli-utils';
+import {EventEmitter} from 'events';
 
 describe('Validation Result Renderer test', () => {
     let outputMessages: string[];
     let consoleMock: typeof console;
+    let loggingEventEmitterMock: EventEmitter;
     let validatorResultList: ValidationResult[];
     let sut: ValidationResultRenderer;
 
@@ -26,8 +28,10 @@ describe('Validation Result Renderer test', () => {
         consoleMock.log = jest.fn().mockImplementation((message: string) => {
             outputMessages.push(message);
         });
+        loggingEventEmitterMock = jest.genMockFromModule('events');
+        loggingEventEmitterMock.emit = jest.fn();
 
-        sut = new ValidationResultRenderer(consoleMock);
+        sut = new ValidationResultRenderer(consoleMock, loggingEventEmitterMock);
     });
 
     describe('When renderValidatorResultGenerator is called on an empty generator', () => {

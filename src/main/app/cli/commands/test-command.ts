@@ -2,11 +2,12 @@ import {AvocatCommand} from '../model/avocat-command';
 import {Command} from 'commander';
 import {AvocatCommandOption} from '../model/avocat-command-option';
 import {Inject, Service} from 'typedi';
-import {ValidationResult} from '../../../core/validator/model/validation-result';
+import {ValidationResult} from '../../../core/validation/model/validation-result';
 import {ValidationResultRenderer} from '../rendering/validation-result-renderer';
 import {Spinner} from 'cli-spinner';
-import {ValidatorService} from '../../../core/validator/validator-service';
-import {ValidatorServiceImpl} from '../../../core/validator/impl/validator-service-impl';
+import {ValidatorService} from '../../../core/validation/validator-service';
+import {ValidatorServiceImpl} from '../../../core/validation/impl/validator-service-impl';
+import {EventEmitter} from 'events';
 
 @Service('test.command')
 export class TestCommand implements AvocatCommand {
@@ -37,7 +38,8 @@ export class TestCommand implements AvocatCommand {
 
     constructor(@Inject(() => ValidatorServiceImpl) private validatorService: ValidatorService,
                 @Inject('validation-result.renderer') private validationResultRenderer: ValidationResultRenderer,
-                @Inject('spinner') private spinner: Spinner) {
+                @Inject('spinner') private spinner: Spinner,
+                @Inject('logging-event-emitter') private loggingEE: EventEmitter) {
     }
 
     public includeInCLI(mainCommand: Command): void {
@@ -50,15 +52,22 @@ export class TestCommand implements AvocatCommand {
                 ? testCommand.requiredOption(this.getOptionFormat(option), option.description)
                 : testCommand.option(this.getOptionFormat(option), option.description));
 
-        testCommand.action(async passedOptions => {
-            const {url, name, version} = this.parseOptions(passedOptions);
+        testCommand.action(passedOptions => this.test(passedOptions));
+    }
 
-            if (!name && !version) {
-                console.warn('Insufficient criteria, please provide a contract name or version');
-                return;
-            }
+    private async test(passedOptions: object): Promise<void> {
+        this.loggingEE.emit('trace');
+        this.loggingEE.emit('info', 'Running Test command');
 
-            this.startSpinner();
+        const {url, name, version} = this.parseOptions(passedOptions);
+
+        if (!name && !version) {
+            console.warn('Insufficient criteria, please provide a contract name or version');
+            return;
+        }
+
+        this.startSpinner();
+        try {
             let validationResults: AsyncGenerator<ValidationResult[]>;
             if (name && version) {
                 validationResults = this.validatorService.validateContractHavingNameAndVersion(url, name, version);
@@ -68,8 +77,10 @@ export class TestCommand implements AvocatCommand {
                 validationResults = this.validatorService.validateContractsHavingVersion(url, version);
             }
             await this.validationResultRenderer.render(validationResults);
-            this.stopSpinner();
-        });
+        } catch (e) {
+            console.error(e.message);
+        }
+        this.stopSpinner();
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -79,9 +90,8 @@ export class TestCommand implements AvocatCommand {
         version: typeof options.version === 'string' ? options.version : undefined
     });
 
-    private getOptionFormat = (option: AvocatCommandOption): string => {
-        return option.shortName + ', ' + option.name + ' ' + option.argument;
-    };
+    private getOptionFormat = (option: AvocatCommandOption): string =>
+        option.shortName + ', ' + option.name + ' ' + option.argument;
 
     private startSpinner(): void {
         this.spinner.setSpinnerTitle('👉 Testing... %s');
