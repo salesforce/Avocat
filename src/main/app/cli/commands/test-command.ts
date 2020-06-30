@@ -18,21 +18,21 @@ export class TestCommand implements AvocatCommand {
             shortName: '-u',
             argument: '<url>',
             required: true,
-            description: 'Server url in which the APIs are hosted e.g. https://www.example.com/'
+            description: '(required) Server url in which the APIs are hosted e.g. https://www.example.com/'
         },
         {
             name: '--name',
             shortName: '-n',
             argument: '<name>',
             required: false,
-            description: 'Specify a contract name to run tests on e.g. "Search Mru"'
+            description: '(optional) Specify a contract name to run tests e.g. "Search Mru"'
         },
         {
             name: '--version',
             shortName: '-v',
             argument: '<version>',
             required: false,
-            description: 'Specify a contract version to run tests on e.g. v49'
+            description: '(optional) Specify a contract version to run tests on e.g. v49'
         },
     ];
 
@@ -43,9 +43,7 @@ export class TestCommand implements AvocatCommand {
     }
 
     public includeInCLI(mainCommand: Command): void {
-        const testCommand = mainCommand
-            .command(this.name)
-            .helpOption('-h, --help', 'Show available options');
+        const testCommand = mainCommand.command(this.name);
 
         this.options.forEach((option: AvocatCommandOption) =>
             option.required

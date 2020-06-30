@@ -33,12 +33,12 @@ export default class CliApp {
         this.mainCommand
             .name('avocat')
             .description('🥑 Continuous contract testing for HTTP APIs')
-            .version(version, '-V, --Version', 'Avocat current version')
-            .helpOption('-h, --help', 'Show available commands/options')
+            .version(version, '-V, --Version', '(optional) Avocat current version')
+            .helpOption('-h, --help', '(optional) Show available commands/options')
             .usage('[command] [options]');
 
-        this.addLogLevelOption();
         this.includeAvocatCommands();
+        this.addLogLevelOption();
 
         if (this.emptyArguments(args)) {
             this.printDefaultHelpMessage();
@@ -49,19 +49,26 @@ export default class CliApp {
     }
 
     private addLogLevelOption(): void {
+        const loglevelOption = {
+            flags: '--loglevel <level>',
+            description: `(optional) Specify the log level. Allowed values: ${CliApp.ALLOWED_LOG_LEVELS}`,
+            defaultValue: 'SILENT'
+        };
         this.mainCommand
-            .option('--loglevel <level>',
-                `Specify the log level. Allowed values: ${CliApp.ALLOWED_LOG_LEVELS}`,
-                'SILENT'
-            )
-            .addListener('option:loglevel', (loglevel: LogLevelDesc) => {
-                try {
-                    this.logger.setDefaultLevel(loglevel);
-                } catch (e) {
-                    console.error(`Invalid loglevel. Allowed values: ${CliApp.ALLOWED_LOG_LEVELS}`);
-                    process.exit(CliApp.INVALID_ARGUMENT);
-                }
-            });
+            .option(loglevelOption.flags, loglevelOption.description, loglevelOption.defaultValue)
+            .addListener('option:loglevel', this.setDefaultLoglevel);
+        this.mainCommand.commands.forEach((subCommand: Command) =>
+            subCommand.option(loglevelOption.flags, loglevelOption.description, loglevelOption.defaultValue));
+
+    }
+
+    private setDefaultLoglevel = (loglevel: LogLevelDesc): void => {
+        try {
+            this.logger.setDefaultLevel(loglevel);
+        } catch (e) {
+            console.error(`Invalid loglevel. Allowed values: ${CliApp.ALLOWED_LOG_LEVELS}`);
+            process.exit(CliApp.INVALID_ARGUMENT);
+        }
     }
 
     private includeAvocatCommands(): void {

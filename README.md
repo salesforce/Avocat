@@ -14,8 +14,9 @@ Avocat is a continuous contract testing tool for HTTP APIs. It allows running in
     3. [ Code Conformance ](#run-code-conformance)
 3. [ Usage ](#usage)
     1. [ CLI Commands ](#cli-commands)
-    2. [ Start Coding ](#start-coding)
-    3. [ Additional Scripts ](#additional-scripts)
+    2. [ Additional Options ](#additional-options)
+    3. [ Start Coding ](#start-coding)
+    4. [ Additional Scripts ](#additional-scripts)
 4. [ Authors ](#authors)
 
 
@@ -125,6 +126,17 @@ Before you start using avocat, make sure you've installed it globally, otherwise
 - CLI::pull
 - CLI::push
 - CLI::reveng
+
+### Additional Options
+- **help** <br/>
+    Show available commands/options 
+    
+- **loglevel** <br/>
+    Show verbose output depending on the specified log level. 
+    This option takes one parameter which is the level. <br/>
+    Allowed values: TRACE|DEBUG|INFO|WARN|ERROR|SILENT (case-insensitive) <br/>
+    Default value: SILENT. <br/>
+    e.g. ``` $ avocat status --loglevel DEBUG```
 
 ### Start coding
 This section describes our code files structure.

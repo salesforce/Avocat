@@ -15,7 +15,7 @@ export default class StatusService {
 
     public async getChangeList(): Promise<Contract[]> {
         this.loggingEE.emit('trace');
-        this.loggingEE.emit('info', 'Fetching current change list...');
+        this.loggingEE.emit('info', 'Looking for the current change list...');
 
         return this.contractRepository.findAll();
     }
