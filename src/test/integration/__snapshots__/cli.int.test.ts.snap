@@ -6,15 +6,15 @@ exports[`CLI Test Help Command Test When running avocat with help option Shows a
 🥑 Continuous contract testing for HTTP APIs
 
 Options:
-  -V, --Version           Avocat current version
-  --loglevel <level>      Specify the log level. Allowed values:
-                          TRACE|DEBUG|INFO|WARN|ERROR|SILENT (default:
-                          \\"SILENT\\")
-  -h, --help              Show available commands/options
+  -V, --Version                     (optional) Avocat current version
+  --loglevel <level>                (optional) Specify the log level. Allowed
+                                    values: TRACE|DEBUG|INFO|WARN|ERROR|SILENT
+                                    (default: \\"SILENT\\")
+  -h, --help                        (optional) Show available commands/options
 
 Commands:
-  status
-  import <contract_path>
+  status [options]
+  import [options] <contract_path>
   test [options]"
 `;
 

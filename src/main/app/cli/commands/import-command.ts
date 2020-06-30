@@ -20,7 +20,6 @@ export default class ImportCommand implements AvocatCommand {
         mainCommand
             .command(this.name)
             .arguments('<contract_path>')
-            .helpOption('-h, --help', 'Show available options')
             .action((contractPath: string) => this.import(contractPath));
     }
 
