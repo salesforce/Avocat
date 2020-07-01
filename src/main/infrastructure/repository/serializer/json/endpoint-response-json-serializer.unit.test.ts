@@ -6,7 +6,8 @@ describe('Endpoint Response JSON serializer test', () => {
     const RESPONSE: EndpointResponse = {
         schema: {},
         contentType: ContentType.JSON,
-        description: 'description'
+        description: 'description',
+        scenarioOverride: 'scenarioOverride'
     };
     let sut: EndpointResponseJsonSerializer;
 

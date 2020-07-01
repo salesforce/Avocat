@@ -106,11 +106,14 @@ export class ValidatorServiceImpl implements ValidatorService {
 
         const responsesValidationResults: Promise<ValidationResult>[] = [];
         for (const [statusCode, endpointResponse] of Object.entries(endpointMethod.responsesSchemas)) {
-            const metadata = metadataBuilder
+            metadataBuilder
                 .withStatusCode(statusCode as HttpStatusCode)
                 .withMethod(endpointMethod.method)
-                .withParameters(endpointMethod.parameters || [])
-                .build();
+                .withParameters(endpointMethod.parameters || []);
+            if(endpointResponse.scenarioOverride) {
+                metadataBuilder.withScenarioOverride(endpointResponse.scenarioOverride);
+            }
+            const metadata = metadataBuilder.build();
             const res = this.validateEndpointResponse(endpointResponse, metadata);
             responsesValidationResults.push(res);
         }
@@ -124,11 +127,11 @@ export class ValidatorServiceImpl implements ValidatorService {
             .then(httpResponse =>
                 this.contractValidator.validate(new ValidationAttempt(metadata.statusCode, endpointResponse.schema, httpResponse))
             )
-            .then(validationResult => this.handleAPIResponse(validationResult, metadata))
+            .then(validationResult => this.handleValidationResult(validationResult, metadata))
             .catch(apiError => this.handleAPIError(apiError, metadata));
     }
 
-    private handleAPIResponse = (validationResult: ValidationResult, metadata: ValidationMetadata): ValidationResult => {
+    private handleValidationResult = (validationResult: ValidationResult, metadata: ValidationMetadata): ValidationResult => {
         this.loggingEE.emit('info', `EndpointResponse '${metadata.statusCode}' ${validationResult.valid ? 'validated' : 'is not valid' }!`);
         return {
             ...validationResult,

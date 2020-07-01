@@ -27,6 +27,12 @@ export class SwaggerEndpointResponseAdapter implements EndpointResponse {
         return this.swaggerResponse.description;
     }
 
+    get scenarioOverride(): string | undefined {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        return this.swaggerResponse['x-scenario-override'];
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private getFirstContentType = (object: any): any => Object.keys.length ? Object.keys(object)[0] : undefined;
 }

@@ -45,6 +45,12 @@ export class ValidationMetadataBuilder {
         return this;
     }
 
+    public withScenarioOverride(path: string): ValidationMetadataBuilder{
+        this.path = path;
+        this.parameters = [];
+        return this;
+    }
+
     public build(): ValidationMetadata {
         return {
             contract: Object.assign({}, this.contract),
