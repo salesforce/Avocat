@@ -8,7 +8,8 @@ export default class EndpointResponseJsonSerializer {
         return {
             schema: endpointResponse.schema,
             contentType: endpointResponse.contentType,
-            description: endpointResponse.description
+            description: endpointResponse.description,
+            scenarioOverride: endpointResponse.scenarioOverride
         };
     }
 }

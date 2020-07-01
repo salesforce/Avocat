@@ -15,8 +15,9 @@ Avocat is a continuous contract testing tool for HTTP APIs. It allows running in
 3. [ Usage ](#usage)
     1. [ CLI Commands ](#cli-commands)
     2. [ Additional Options ](#additional-options)
-    3. [ Start Coding ](#start-coding)
-    4. [ Additional Scripts ](#additional-scripts)
+    3. [ Scenario Override ](#scenario-override)
+    4. [ Start Coding ](#start-coding)
+    5. [ Additional Scripts ](#additional-scripts)
 4. [ Authors ](#authors)
 
 
@@ -86,22 +87,22 @@ Before you start using avocat, make sure you've installed it globally, otherwise
 
 ### CLI Commands
 
-- **status** <br/>
-    This command allows you check if there is pending changes in your local repositories. It takes no parameters or options. <br/>
-    e.g. ``` $ avocat status ``` <br/>
+- **status**  
+    This command allows you check if there is pending changes in your local repositories. It takes no parameters or options.  
+    e.g. ``` $ avocat status ```  
     *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI%3A%3Astatus).*
 
-- **import** <br/>
-    This command allows you to import new contract version into local repository. It takes one parameter which is your contract file. <br/>
-    e.g. ``` $ avocat import '/path/to/contract' ``` <br/>
-    *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI%3A%3Aimport).*<br/>
+- **import**  
+    This command allows you to import new contract version into the local store. It takes one parameter which is your contract file.  
+    e.g. ``` $ avocat import '/path/to/contract' ```  
+    *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI%3A%3Aimport).*
     
     **Note that the import command uses the directory ~/.avocat as the default local store.**
-    In case you need to override it, please set the AVOCAT_STORE_DIR environment variable with the desired directory value.<br/> 
+    In case you need to override it, please set the AVOCAT_STORE_DIR environment variable with the desired directory value.  
     e.g. ``` $ export AVOCAT_STORE_DIR='/path/to/store'  ```
-- **test** <br/> 
+- **test**  
     This command allows you to validate contracts in your local repository. 
-    You need to add some options to specify contracts on which you're running validations.<br/>
+    You need to add some options to specify contracts on which you're running validations.
 
     Available options:
     * url (required): Server url in which the APIs are hosted e.g. https://www.example.com/
@@ -114,12 +115,12 @@ Before you start using avocat, make sure you've installed it globally, otherwise
     * When both name and version options are provided, tests will be run on contract’s specified version only
     * When neither name nor version are provided, an error message will be displayed "Insufficient criteria"
     
-    e.g. ``` $ avocat test --url http://www.example.com/services --name 'My Contract' --version 2.1``` <br/>
-    *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI::test).* <br/>
+    e.g. ``` $ avocat test --url http://www.example.com/services --name 'My Contract' --version 2.1```   
+    *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI::test).* 
     
     **Note that the test command uses the SID environment variable to get the Bearer authorization token.** 
-    Please update it with a valid token before you start testing. 
-    However, more authentication types will be implemented in the future. <br/>
+    Please update it with a valid token before you start testing.
+    However, more authentication types will be implemented in the future.     
     e.g. ``` $ export SID='This is a valid token' ```
        
 - CLI::amend
@@ -128,21 +129,34 @@ Before you start using avocat, make sure you've installed it globally, otherwise
 - CLI::reveng
 
 ### Additional Options
-- **help** <br/>
+- **help**  
     Show available commands/options 
     
-- **loglevel** <br/>
+- **loglevel**  
     Show verbose output depending on the specified log level. 
-    This option takes one parameter which is the level. <br/>
-    Allowed values: TRACE|DEBUG|INFO|WARN|ERROR|SILENT (case-insensitive) <br/>
-    Default value: SILENT. <br/>
+    This option takes one parameter which is the level.   
+    Allowed values: TRACE|DEBUG|INFO|WARN|ERROR|SILENT (case-insensitive)  
+    Default value: SILENT  
     e.g. ``` $ avocat status --loglevel DEBUG```
+    
+### Scenario Override
+Despite the capabilities of OpenAPI Specification, we still can't define different responses based on a parameter existence or value 
+(check the docs [here](http://goswagger.io/faq/faq_model.html#request-response-can-have-different-objects-returned-based-on-query-parameters)). 
+However, we introduce a way here to override a default scenario using an [OpenAPI custom extension](https://swagger.io/docs/specification/openapi-extensions/) (x-scenario-override). 
+Define this extension under a response object, then set its value with an API path that contains custom parameters values.  
+Check out this example below, an invalid value for a param is set to receive 400 response:
+```yaml
+responses:
+  400:
+    description: "Invalid input"
+    x-scenario-override: "/path/to/API?param=INVALID_VALUE"
+```
 
 ### Start coding
 This section describes our code files structure.
 
 #### Source code files
-Could be found in avocat/src directory. <br/>
+Could be found in avocat/src directory. 
 ```
     |_ main               # source code and unit tests        
       |_ app              # commands UX management            

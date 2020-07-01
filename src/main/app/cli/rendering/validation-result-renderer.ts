@@ -25,7 +25,7 @@ export class ValidationResultRenderer {
             this.loggingEE.emit('debug', `Rendering validation result for contract '${validationResultList[0].metadata.contract.name}'...`);
             emptyResults = false;
             this.outputStream.log('\n-----------------------------------------------------');
-            this.outputStream.log('🤝 ' + validationResultList[0].metadata.contract.name);
+            this.outputStream.log(`🤝 ${validationResultList[0].metadata.contract.name}: version ${validationResultList[0].metadata.contract.version}`);
             const validationResultSortedList = [...validationResultList].sort(validationResultComparator);
             this.renderValidationResultList(validationResultSortedList);
         }
@@ -36,7 +36,7 @@ export class ValidationResultRenderer {
 
     private renderValidationResultList = (validationResultList: ValidationResult[]): void =>
         validationResultList.forEach(validationResult => {
-            this.outputStream.log(this.INDENT + `${validationResult.metadata.path} ${validationResult.metadata.contract.version}`);
+            this.outputStream.log(this.INDENT + validationResult.metadata.path);
             this.outputStream.log(this.DOUBLE_INDENT + `${validationResult.valid ? '✅' : '❌'}  ${validationResult.metadata.method}: ${validationResult.metadata.statusCode}`);
             this.renderErrorsList(validationResult.errors);
         });

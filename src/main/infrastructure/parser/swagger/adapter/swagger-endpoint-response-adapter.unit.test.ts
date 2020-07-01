@@ -28,33 +28,36 @@ describe('Swagger endpoint response adapter test', () => {
             }
         }
     };
+    const SCENARIO_OVERRIDE = 'override/url/to/API';
 
-    let responseObjectMock: OpenAPIV3.ResponseObject;
+    let responseObjectFake: OpenAPIV3.ResponseObject & {'x-scenario-override': string };
 
     beforeEach(() => {
-        responseObjectMock = {
+        responseObjectFake = {
             description: DESCRIPTION,
-            content: {'application/json': {schema: SCHEMA}}
+            content: {'application/json': {schema: SCHEMA}},
+            'x-scenario-override': SCENARIO_OVERRIDE
         };
     });
 
     describe('When adapter is called with an OpenAPIv3 Response object', () => {
         it('Should return a nonempty Response object', () => {
-            const endpointResponse: EndpointResponse = new SwaggerEndpointResponseAdapter(responseObjectMock);
+            const endpointResponse: EndpointResponse = new SwaggerEndpointResponseAdapter(responseObjectFake);
 
             expect(endpointResponse).toMatchObject({
                 contentType: APP_JSON,
                 description: DESCRIPTION,
-                schema: SCHEMA
+                schema: SCHEMA,
+                scenarioOverride: SCENARIO_OVERRIDE
             });
         });
     });
 
     describe('When adapter is called with an OpenAPIv3 Response object and content is undefined', () => {
         it('Should return a nonempty Response object with empty schema', () => {
-            responseObjectMock.content = undefined;
+            responseObjectFake.content = undefined;
 
-            const endpointResponse: EndpointResponse = new SwaggerEndpointResponseAdapter(responseObjectMock);
+            const endpointResponse: EndpointResponse = new SwaggerEndpointResponseAdapter(responseObjectFake);
 
             expect(endpointResponse).toMatchObject({description: DESCRIPTION, schema: {}});
         });
@@ -62,12 +65,12 @@ describe('Swagger endpoint response adapter test', () => {
 
     describe('When adapter is called with an OpenAPIv3 Response object and schema is undefined', () => {
         it('Should return a nonempty Response object with empty schema', () => {
-            if (!responseObjectMock.content) {
-                throw new Error('responseObjectMock content is undefined');
+            if (!responseObjectFake.content) {
+                throw new Error('content is undefined');
             }
-            responseObjectMock.content['application/json'].schema = undefined;
+            responseObjectFake.content['application/json'].schema = undefined;
 
-            const endpointResponse: EndpointResponse = new SwaggerEndpointResponseAdapter(responseObjectMock);
+            const endpointResponse: EndpointResponse = new SwaggerEndpointResponseAdapter(responseObjectFake);
 
             expect(endpointResponse).toMatchObject({description: DESCRIPTION, schema: {}});
         });

@@ -57,8 +57,8 @@ describe('Validation Result Renderer test', () => {
             return sut.render(TestCliUtils.generatorMock(validatorResultList)).then(() => {
                 expect(outputMessages.map(m => m.trim())).toStrictEqual([
                     '-----------------------------------------------------',
-                    '🤝 CONTRACT_NAME',
-                    'PATH CONTRACT_VERSION',
+                    '🤝 CONTRACT_NAME: version CONTRACT_VERSION',
+                    'PATH',
                     '✅  ' + HttpMethod.GET + ': ' + HttpStatusCode.SUCCESS
                 ]);
             });
@@ -80,10 +80,10 @@ describe('Validation Result Renderer test', () => {
             return sut.render(TestCliUtils.generatorMock(validatorResultList)).then(() => {
                 expect(outputMessages.map(m => m.trim())).toStrictEqual([
                     '-----------------------------------------------------',
-                    '🤝 CONTRACT_NAME',
-                    'PATH CONTRACT_VERSION',
+                    '🤝 CONTRACT_NAME: version CONTRACT_VERSION',
+                    'PATH',
                     '✅  ' + HttpMethod.GET + ': ' + HttpStatusCode.SUCCESS,
-                    'PATH CONTRACT_VERSION',
+                    'PATH',
                     '❌  ' + HttpMethod.GET + ': ' + HttpStatusCode.SUCCESS,
                     '- ERROR'
                 ]);

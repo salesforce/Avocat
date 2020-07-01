@@ -22,6 +22,7 @@ describe('Validator Service test', () => {
     const parameter = '{"name": "param", "required": "true", "type": "query", "schema": {}, "examples": ["param_example"]}';
     const responseSchema200 = '"200": {}';
     const responseSchema400 = '"400": {}';
+    const responseSchema400WithScenarioOverride = '"400": {"scenarioOverride": "/SCENARIO_OVERRIDE"}';
     const endpointMethodGetWithParams = `{
                           "method": "GET",
                           "parameters": [ ${parameter} ],
@@ -30,7 +31,7 @@ describe('Validator Service test', () => {
     const endpointMethodGetWithNoParams = `{
                           "method": "GET",
                           "parameters": [],
-                          "responsesSchemas": { ${responseSchema200}, ${responseSchema400} }
+                          "responsesSchemas": { ${responseSchema200}, ${responseSchema400WithScenarioOverride} }
                         }`;
     const endpointMethodPost = `{
                           "method": "POST",
@@ -75,22 +76,19 @@ describe('Validator Service test', () => {
         contractRepositoryMock = jest.genMockFromModule('../../contract/contract-repository');
 
         contractRepositoryMock.findByNameAndVersion = jest.fn()
-            .mockImplementationOnce(() =>
-                Promise.resolve(
-                    ContractMapper.mapJsonToContractObject(contractJsonFake1)
-                ))
-            .mockImplementationOnce(() =>
-                Promise.resolve(
-                    ContractMapper.mapJsonToContractObject(contractJsonFake2)
-                ));
+            .mockReturnValueOnce(Promise.resolve(
+                ContractMapper.mapJsonToContractObject(contractJsonFake1)
+            ))
+            .mockReturnValueOnce(Promise.resolve(
+                ContractMapper.mapJsonToContractObject(contractJsonFake2)
+            ));
 
         contractValidatorMock = jest.genMockFromModule('../contract-validator');
         contractValidatorMock.validate = jest.fn()
-            .mockImplementation(() =>
-                Promise.resolve({
-                    valid: true,
-                    errors: []
-                }));
+            .mockReturnValue(Promise.resolve({
+                valid: true,
+                errors: []
+            }));
 
         httpServiceMock = jest.genMockFromModule('../../http/http-client');
         httpServiceMock.get = jest.fn();
@@ -113,7 +111,7 @@ describe('Validator Service test', () => {
                 expectedValidResult('/mru1', HttpMethod.GET, HttpStatusCode.BAD_REQUEST),
                 expectedInvalidResult('/mru1', HttpMethod.POST, HttpStatusCode.SUCCESS, ['Sorry!! http method POST is not implemented yet']),
                 expectedValidResult('/mru2', HttpMethod.GET, HttpStatusCode.SUCCESS),
-                expectedValidResult('/mru2', HttpMethod.GET, HttpStatusCode.BAD_REQUEST),
+                expectedValidResult('/SCENARIO_OVERRIDE', HttpMethod.GET, HttpStatusCode.BAD_REQUEST),
             ]);
         });
     });
@@ -135,7 +133,7 @@ describe('Validator Service test', () => {
                 expectedValidResult('/mru1', HttpMethod.GET, HttpStatusCode.BAD_REQUEST),
                 expectedInvalidResult('/mru1', HttpMethod.POST, HttpStatusCode.SUCCESS, ['Sorry!! http method POST is not implemented yet']),
                 expectedValidResult('/mru2', HttpMethod.GET, HttpStatusCode.SUCCESS),
-                expectedValidResult('/mru2', HttpMethod.GET, HttpStatusCode.BAD_REQUEST),
+                expectedValidResult('/SCENARIO_OVERRIDE', HttpMethod.GET, HttpStatusCode.BAD_REQUEST),
             ]);
         });
     });
@@ -164,7 +162,7 @@ describe('Validator Service test', () => {
                 expectedValidResult('/mru1', HttpMethod.GET, HttpStatusCode.BAD_REQUEST),
                 expectedInvalidResult('/mru1', HttpMethod.POST, HttpStatusCode.SUCCESS, ['Sorry!! http method POST is not implemented yet']),
                 expectedValidResult('/mru2', HttpMethod.GET, HttpStatusCode.SUCCESS),
-                expectedValidResult('/mru2', HttpMethod.GET, HttpStatusCode.BAD_REQUEST),
+                expectedValidResult('/SCENARIO_OVERRIDE', HttpMethod.GET, HttpStatusCode.BAD_REQUEST),
             ]);
         });
     });

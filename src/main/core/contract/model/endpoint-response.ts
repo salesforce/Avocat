@@ -4,4 +4,5 @@ export interface EndpointResponse {
     schema: object;
     contentType?: ContentType;
     description?: string;
+    scenarioOverride?: string;
 }
