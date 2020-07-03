@@ -6,7 +6,6 @@ export interface Contract {
     name: string;
     status: ContractStatus;
     description?: string;
-    components?: object;
     endpoints: Endpoint[];
 }
 

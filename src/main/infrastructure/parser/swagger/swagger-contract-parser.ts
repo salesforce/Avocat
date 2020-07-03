@@ -26,8 +26,7 @@ export default class SwaggerContractParser implements ContractParser {
             this.loggingEE.emit('info', `Reading contract in path '${contractPath}', and validating its syntax...`);
             return await SwaggerParser.validate(contractPath);
         } catch (err) {
-            this.loggingEE.emit('error', `The contract in path '${contractPath}' is not found or has invalid syntax...`);
-            throw new Error('The contract is invalid: ' + err.message);
+            return Promise.reject(err.message);
         }
     };
 }

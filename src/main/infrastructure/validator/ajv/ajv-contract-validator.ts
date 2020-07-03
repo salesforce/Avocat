@@ -14,7 +14,7 @@ export class AjvContractValidator implements ContractValidator {
     public async validate(validationAttempt: ValidationAttempt): Promise<ValidationResult> {
         this.loggingEE.emit('trace');
 
-        const ajv = new Ajv({allErrors: true});
+        const ajv = new Ajv({allErrors: true, nullable: true});
 
         this.loggingEE.emit('debug', `Validating schema for endpointResponse '${validationAttempt.expectedStatusCode}'...`);
         const schemaIsValid: boolean = await this.validateSchema(ajv, validationAttempt);

@@ -7,13 +7,6 @@ describe('Swagger contract adapter test', () => {
     const CONTRACT_TITLE = 'TEST_SAMPLE_CONTRACT';
     const CONTRACT_VERSION = '2.2.2';
     const CONTRACT_DESCRIPTION = 'This is test sample contract';
-    const COMPONENTS = {
-        schemas: {
-            'Record': {
-                type: 'string'
-            } as OpenAPIV3.NonArraySchemaObject
-        }
-    };
     const PATHS = {
         '/mru': {
             get: {
@@ -31,7 +24,6 @@ describe('Swagger contract adapter test', () => {
                 description: CONTRACT_DESCRIPTION,
             },
             openapi: '',
-            components: COMPONENTS,
             paths: PATHS
         };
     });
@@ -49,7 +41,7 @@ describe('Swagger contract adapter test', () => {
         it('Should return a nonempty Contract object', () => {
             const contract: Contract = new SwaggerContractAdapter(fakeSwaggerContract);
             validateCommonProperties(contract);
-            expect(contract).toMatchObject({description: CONTRACT_DESCRIPTION, components: COMPONENTS});
+            expect(contract).toMatchObject({description: CONTRACT_DESCRIPTION});
         });
     });
 
@@ -58,16 +50,7 @@ describe('Swagger contract adapter test', () => {
             fakeSwaggerContract.info.description = undefined;
             const contract: Contract = new SwaggerContractAdapter(fakeSwaggerContract);
             validateCommonProperties(contract);
-            expect(contract).toMatchObject({description: '', components: COMPONENTS});
-        });
-    });
-
-    describe('When adapter is instantiated with an OpenAPIv3 Object and components is undefined', () => {
-        it('Should return a nonempty Contract object with components as an empty object', () => {
-            fakeSwaggerContract.components = undefined;
-            const contract: Contract = new SwaggerContractAdapter(fakeSwaggerContract);
-            validateCommonProperties(contract);
-            expect(contract.components).toStrictEqual({});
+            expect(contract).toMatchObject({description: ''});
         });
     });
 });

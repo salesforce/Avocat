@@ -25,10 +25,6 @@ export class SwaggerContractAdapter implements Contract {
         return this.swaggerContract.info.description || '';
     }
 
-    public get components(): object {
-        return this.swaggerContract.components || {};
-    }
-
     public get endpoints(): Endpoint[] {
         return Object.entries(this.swaggerContract.paths).map(([path, pathProperties]) =>
             new SwaggerEndpointAdapter(path, pathProperties)
