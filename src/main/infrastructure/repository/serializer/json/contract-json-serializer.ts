@@ -15,7 +15,6 @@ export default class ContractJsonSerializer implements ContractSerializer {
             version: contract.version,
             status: contract.status,
             description: contract.description,
-            components: contract.components,
             endpoints: contract.endpoints.map(endpoint => this.endpointJsonSerializer.serialize(endpoint))
         });
     }

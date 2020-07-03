@@ -22,7 +22,6 @@ describe('Contract JSON serializer test', () => {
         version: 'version',
         status: ContractStatus.NOT_VERIFIED,
         description: 'description',
-        components: {},
         endpoints: [ENDPOINT]
     };
     let sut: ContractSerializer;

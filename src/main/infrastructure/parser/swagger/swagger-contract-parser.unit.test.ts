@@ -23,9 +23,9 @@ describe('Swagger contracts service test', () => {
     });
 
     describe('When parse method is called and the contract could not found', () => {
-        it('Should parse the swagger contract into a nonempty Contract object', () => {
-            return sut.parse(CONTRACT_PATH + 'invalid_string').catch((error) => {
-                expect(error.message).toContain('The contract is invalid:');
+        it('Should throw ENOENT: Error opening file error', () => {
+            return sut.parse(CONTRACT_PATH + 'invalid_path').catch((error) => {
+                expect(error).toContain('Error opening file');
             });
         });
     });
