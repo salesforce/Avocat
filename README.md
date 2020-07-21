@@ -19,6 +19,7 @@ Avocat is a continuous contract testing tool for HTTP APIs. It allows running in
     4. [ Start Coding ](#start-coding)
     5. [ Additional Scripts ](#additional-scripts)
 4. [ Authors ](#authors)
+5. [ License ](#license)
 
 
 ## Getting Started
@@ -203,4 +204,7 @@ We've added some custom scripts that might be useful when coding in Avocat.
 | XML  | Not supported |
 
 ## Authors
-[SPEP Team](https://gus.lightning.force.com/lightning/r/ADM_Scrum_Team__c/a00B0000000wkIzIAI/view). Salesforce, Grenoble
+[SPEP Team](https://gus.lightning.force.com/lightning/r/ADM_Scrum_Team__c/a00B0000000wkIzIAI/view), Salesforce.
+
+## License
+The [APACHE LICENSE, VERSION 2.0](./LICENSE.md) governs your use of Avocat.
