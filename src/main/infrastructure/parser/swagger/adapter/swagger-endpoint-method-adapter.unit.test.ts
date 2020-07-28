@@ -1,3 +1,12 @@
+/*
+ *
+ *  * Copyright (c) 2018, salesforce.com, inc.
+ *  * All rights reserved.
+ *  * SPDX-License-Identifier: BSD-3-Clause
+ *  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
 import {EndpointMethod} from '../../../../core/contract/model/endpoint-method';
 import {HttpMethod} from '../../../../core/contract/enums/http-method';
 import {SwaggerEndpointMethodAdapter} from './swagger-endpoint-method-adapter';
