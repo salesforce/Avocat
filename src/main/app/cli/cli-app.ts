@@ -9,6 +9,8 @@ import {AvocatCommand} from './model/avocat-command';
 import ImportCommand from './commands/import-command';
 import {TestCommand} from './commands/test-command';
 import {Logger, LogLevelDesc} from 'loglevel';
+import {EnvAddCommand} from './commands/env/env-add-command';
+import {EnvListCommand} from './commands/env/env-list-command';
 
 @Service()
 export default class CliApp {
@@ -21,11 +23,15 @@ export default class CliApp {
                 @Inject('logger') private logger: Logger,
                 @Inject('status.command') private statusCommand: StatusCommand,
                 @Inject('import.command') private importCommand: ImportCommand,
-                @Inject('test.command') private testCommand: TestCommand) {
+                @Inject('test.command') private testCommand: TestCommand,
+                @Inject('env-add.command') private envAddCommand: EnvAddCommand,
+                @Inject('env-list.command') private envListCommand: EnvListCommand) {
         this.commands = [
             statusCommand,
             importCommand,
-            testCommand
+            testCommand,
+            envAddCommand,
+            envListCommand
         ];
     }
 

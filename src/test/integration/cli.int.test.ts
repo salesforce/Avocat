@@ -51,5 +51,25 @@ describe('CLI Test', () => {
             });
         });
     });
+
+    describe('Environment Command Test', () => {
+        describe('When adding a new environment with valid values', () => {
+            it('should show a message that an environment was added', () => {
+                return TestCliUtils.transpileAndRunAvocatFromCLI(['env:add', '-n env1', '-u https://www.example.com/', '-t TOKEN']).then(result => {
+                    expect(result.code).toBe(0);
+                    expect(result.stdout.trim()).toMatchSnapshot();
+                }).catch(console.error);
+            });
+        });
+
+        describe('When asking for the existing environments list', () => {
+            it('should show a list with of the existing environments', () => {
+                return TestCliUtils.transpileAndRunAvocatFromCLI(['env:list']).then(result => {
+                    expect(result.code).toBe(0);
+                    expect(result.stdout.trim()).toMatchSnapshot();
+                }).catch(console.error);
+            });
+        });
+    });
 });
 

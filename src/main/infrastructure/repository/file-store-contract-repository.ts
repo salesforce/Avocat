@@ -16,7 +16,7 @@ export class FileStoreContractRepository implements ContractRepository {
     constructor(@Inject('fs') private fileSystem: typeof fs,
                 @Inject(() => SwaggerContractParser) private contractParser: ContractParser,
                 @Inject(() => ContractJsonSerializer) private contractSerializer: ContractSerializer,
-                @Inject('store-dir') private readonly storeDir: string,
+                @Inject('contracts-store-dir') private readonly contractsStoreDir: string,
                 @Inject('logging-event-emitter') private loggingEE: EventEmitter) {
     }
 
@@ -34,7 +34,7 @@ export class FileStoreContractRepository implements ContractRepository {
     public async save(contract: Contract): Promise<string> {
         this.loggingEE.emit('trace');
 
-        const contractDir = path.join(this.storeDir, contract.name);
+        const contractDir = path.join(this.contractsStoreDir, contract.name);
         this.loggingEE.emit('debug',`Writing contract version '${contract.version}' in the directory '${contractDir}'...`);
         await this.createFileAndDirectories(contractDir, contract.version, this.contractSerializer.serialize(contract));
         this.loggingEE.emit('info',`Contract '${contract.name}' version ${contract.version} saved to local store successfully!`);
@@ -51,7 +51,7 @@ export class FileStoreContractRepository implements ContractRepository {
         this.loggingEE.emit('trace');
 
         this.loggingEE.emit('debug','Looking for all contracts in the local store...');
-        const allContractsNames: string[] = await this.readDirectory(this.storeDir);
+        const allContractsNames: string[] = await this.readDirectory(this.contractsStoreDir);
         this.loggingEE.emit('info',`Contracts found: {${allContractsNames}}`);
 
         return Promise.all(allContractsNames.map(this.findByName))
@@ -66,7 +66,7 @@ export class FileStoreContractRepository implements ContractRepository {
         this.loggingEE.emit('trace');
 
         this.loggingEE.emit('debug',`Looking for all of '${contractName}' versions in the local store...`);
-        const versions = await this.readDirectory(path.join(this.storeDir, contractName));
+        const versions = await this.readDirectory(path.join(this.contractsStoreDir, contractName));
         this.loggingEE.emit('info',`Contract '${contractName}' versions found: {${versions}}`);
 
         return ContractMapper
@@ -77,7 +77,7 @@ export class FileStoreContractRepository implements ContractRepository {
         this.loggingEE.emit('trace');
 
         this.loggingEE.emit('debug','Looking for all contracts in the local store...');
-        const allContractsNames = await this.readDirectory(this.storeDir);
+        const allContractsNames = await this.readDirectory(this.contractsStoreDir);
         this.loggingEE.emit('debug',`Contracts found: {${allContractsNames}}`);
 
         this.loggingEE.emit('debug',`Filtering contracts not having version ${contractVersion}...`);
@@ -111,7 +111,7 @@ export class FileStoreContractRepository implements ContractRepository {
     }
 
     private async contractHasVersion(name: string, version: string): Promise<boolean> {
-        return await this.fileSystem.promises.access(path.join(this.storeDir, name, version))
+        return await this.fileSystem.promises.access(path.join(this.contractsStoreDir, name, version))
             .then(() => true)
             .catch(() => false);
     }
@@ -119,7 +119,7 @@ export class FileStoreContractRepository implements ContractRepository {
     public findByNameAndVersion(name: string, version: string): Promise<Contract> {
         this.loggingEE.emit('trace');
 
-        return this.readFile(path.join(this.storeDir, name, version))
+        return this.readFile(path.join(this.contractsStoreDir, name, version))
             .then(ContractMapper.mapJsonToContractObject);
     }
 

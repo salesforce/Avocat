@@ -44,7 +44,6 @@ export class ValidationResultBuilder {
                     status: ContractStatus.NOT_VERIFIED,
                     endpoints: []
                 },
-                hostURL: '',
                 path: '',
                 statusCode: HttpStatusCode.SUCCESS,
                 method: HttpMethod.GET,

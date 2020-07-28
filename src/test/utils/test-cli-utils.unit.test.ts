@@ -24,14 +24,13 @@ describe('Test CLI Utils', () => {
         });
     });
 
-    describe('When runCommand function is called with (mainCommand and command)', () => {
-        it('Should call mainCommand.parse with the provided parameters',() => {
+    describe('When runCommandFromCommander function is called with (mainCommand and command)', () => {
+        it('Should call mainCommand.parseAsync with the provided parameters', () => {
             const mainCommand: Command = jest.genMockFromModule('commander');
-            mainCommand.parse = jest.fn();
+            mainCommand.parseAsync = jest.fn().mockResolvedValueOnce('');
 
-            TestCliUtils.runCommandFromCommander(mainCommand, 'ls');
-
-            expect(mainCommand.parse).toHaveBeenCalledTimes(1);
+            return TestCliUtils.runCommandFromCommander(mainCommand, 'ls')
+                .then(() => expect(mainCommand.parseAsync).toHaveBeenCalledTimes(1));
         });
     });
 });

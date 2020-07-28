@@ -102,7 +102,7 @@ describe('Validator Service test', () => {
     describe('When validateContractHavingNameAndVersion is called and there is a matching contract', () => {
         it('Should run validation on all of the contract versions', async () => {
             const allValidatorResults =
-                await sut.validateContractHavingNameAndVersion('http://FAKE_URL.co', contractName1, version1)
+                await sut.validateContractHavingNameAndVersion(contractName1, version1)
                     .next()
                     .then(list => list.value);
 
@@ -124,7 +124,7 @@ describe('Validator Service test', () => {
                 ]);
             let allValidatorResults: ValidationResult[] = [];
 
-            for await (const validatorResults of sut.validateContractHavingName('http://FAKE_URL.co', contractName1)) {
+            for await (const validatorResults of sut.validateContractHavingName(contractName1)) {
                 allValidatorResults = allValidatorResults.concat(validatorResults);
             }
 
@@ -153,7 +153,7 @@ describe('Validator Service test', () => {
                 ]);
             let allValidatorResults: ValidationResult[] = [];
 
-            for await (const validatorResults of sut.validateContractsHavingVersion('http://FAKE_URL.co', version2)) {
+            for await (const validatorResults of sut.validateContractsHavingVersion(version2)) {
                 allValidatorResults = allValidatorResults.concat(validatorResults);
             }
 

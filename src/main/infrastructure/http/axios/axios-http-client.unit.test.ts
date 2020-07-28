@@ -4,10 +4,12 @@ import {AxiosInstance} from 'axios';
 import {HttpStatusCode} from '../../../core/contract/enums/http-status-code';
 import {HttpResponse} from '../../../core/http/model/http-response';
 import {EventEmitter} from 'events';
+import {ApplicationContext} from '../../../app/config/application-context';
 
 describe('Axios Http Service test', () => {
     let axiosInstanceMock: AxiosInstance;
     let loggingEventEmitterMock: EventEmitter;
+    let applicationContextMock: ApplicationContext;
     let sut: AxiosHttpClient;
     const parameterFake = {
         name: '',
@@ -17,17 +19,22 @@ describe('Axios Http Service test', () => {
         schema: {},
         description: ''
     };
-
     const expectedResponse = {
         property1: '1',
         property2: 2,
     };
+    const FAKE_URL = 'http://FAKE_URL.co';
+    const FAKE_TOKEN = 'FAKE_TOKEN';
 
     beforeEach(() => {
         axiosInstanceMock = jest.genMockFromModule('axios');
         loggingEventEmitterMock = jest.genMockFromModule('events');
         loggingEventEmitterMock.emit = jest.fn();
-        sut = new AxiosHttpClient(axiosInstanceMock, loggingEventEmitterMock);
+        applicationContextMock = jest.genMockFromModule('../../../app/config/application-context');
+        applicationContextMock.get = jest.fn().mockImplementation((id: string) => {
+            return (id === 'host-url') ? FAKE_URL : FAKE_TOKEN;
+        });
+        sut = new AxiosHttpClient(applicationContextMock, axiosInstanceMock, loggingEventEmitterMock);
     });
 
     describe('When get method is called with a valid API url and list of parameters', () => {
@@ -35,7 +42,7 @@ describe('Axios Http Service test', () => {
             axiosInstanceMock.get = jest.fn()
                 .mockImplementationOnce(() => (Promise.resolve({status: 200, data: expectedResponse})));
 
-            return sut.get('http://FAKE_API_URL.co', [parameterFake])
+            return sut.get('path/to/api', [parameterFake])
                 .then(httpResponse => expect(httpResponse).toMatchObject({
                     statusCode: HttpStatusCode.SUCCESS,
                     payload: expectedResponse
@@ -48,7 +55,7 @@ describe('Axios Http Service test', () => {
             axiosInstanceMock.get = jest.fn()
                 .mockImplementationOnce(() => (Promise.resolve({status: 200, data: expectedResponse})));
 
-            return sut.get('http://FAKE_API_URL.co', [])
+            return sut.get('path/to/api', [])
                 .then(httpResponse => expect(httpResponse).toMatchObject({
                     statusCode: HttpStatusCode.SUCCESS,
                     payload: expectedResponse

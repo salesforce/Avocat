@@ -34,7 +34,7 @@ describe('Validation Result Renderer test', () => {
         sut = new ValidationResultRenderer(consoleMock, loggingEventEmitterMock);
     });
 
-    describe('When renderValidatorResultGenerator is called on an empty generator', () => {
+    describe('When render is called on an empty generator', () => {
         it('Should print no contracts found message', () => {
             validatorResultList = [];
 
@@ -46,7 +46,7 @@ describe('Validation Result Renderer test', () => {
         });
     });
 
-    describe('When renderValidatorResultGenerator is called on a nonempty generator that contain a valid result', () => {
+    describe('When render is called on a nonempty generator that contain a valid result', () => {
         it('Should print the validated contract metadata with a status valid without any error', () => {
             validatorResultList = [{
                 valid: true,
@@ -65,7 +65,7 @@ describe('Validation Result Renderer test', () => {
         });
     });
 
-    describe('When renderValidatorResultGenerator is called on a nonempty generator that contain an invalid and valid results', () => {
+    describe('When render is called on a nonempty generator that contain an invalid and valid results', () => {
         it('Should print the validated contract metadata with a status valid without any error', () => {
             validatorResultList = [{
                 valid: true,

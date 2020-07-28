@@ -5,7 +5,6 @@ import {EndpointParameter} from '../../contract/model/endpoint-parameter';
 
 export interface ValidationMetadata {
     contract: Contract;
-    hostURL: string;
     path: string;
     method: HttpMethod;
     parameters: EndpointParameter[];
@@ -14,15 +13,13 @@ export interface ValidationMetadata {
 
 export class ValidationMetadataBuilder {
     private readonly contract: Contract;
-    private readonly hostURL: string;
     private path = '';
     private method = HttpMethod.GET;
     private parameters: EndpointParameter[] = [];
     private statusCode = HttpStatusCode.SUCCESS;
 
-    constructor(hostURL: string, contract: Contract) {
+    constructor(contract: Contract) {
         this.contract = contract;
-        this.hostURL = hostURL;
     }
 
     public withPath(path: string): ValidationMetadataBuilder {
@@ -54,7 +51,6 @@ export class ValidationMetadataBuilder {
     public build(): ValidationMetadata {
         return {
             contract: Object.assign({}, this.contract),
-            hostURL: this.hostURL,
             path: this.path,
             statusCode: this.statusCode,
             method: this.method,
