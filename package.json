@@ -25,9 +25,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@git.soma.salesforce.com:searchdev/avocat.git"
+    "url": "git@github.com:salesforce/Avocat.git"
   },
-  "author": "Product Engagement Platform (Search PEP) team, Salesforce",
+  "author": "Salesforce",
   "license": "ISC",
   "devDependencies": {
     "@types/clear": "^0.1.0",
@@ -71,11 +71,11 @@
   },
   "keywords": [
     "avocat",
+    "OAS",
+    "OpenAPI"
     "rest api test",
     "contract test",
     "test by contract",
-    "intergration test",
-    "pep team",
-    "Salesforce"
+    "intergration test"
   ]
 }

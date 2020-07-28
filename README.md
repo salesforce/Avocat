@@ -32,7 +32,7 @@ Avocat installation is a simple process. It won't take too much of your time ðŸ˜
 ### Installation
 - Clone this git repository into a local directory
     ```sh
-        $ git clone git@git.soma.salesforce.com:searchdev/avocat.git
+        $ git clone git@github.com:salesforce/Avocat.git
     ```
 
 - Open it
@@ -91,12 +91,12 @@ Before you start using avocat, make sure you've installed it globally, otherwise
 - **status**  
     This command allows you check if there is pending changes in your local repositories. It takes no parameters or options.  
     e.g. ``` $ avocat status ```  
-    *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI%3A%3Astatus).*
+    *See more detailed examples [here](https://github.com/salesforce/Avocat/wiki/CLI%3A%3Astatus).*
 
 - **import**  
     This command allows you to import new contract version into the local store. It takes one parameter which is your contract file.  
     e.g. ``` $ avocat import '/path/to/contract' ```  
-    *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI%3A%3Aimport).*
+    *See more detailed examples [here](https://github.com/salesforce/Avocat/wiki/CLI%3A%3Aimport).*
     
     **Note that the import command uses the directory ~/.avocat as the default local store.**
     In case you need to override it, please set the AVOCAT_STORE_DIR environment variable with the desired directory value.  
@@ -117,7 +117,7 @@ Before you start using avocat, make sure you've installed it globally, otherwise
     * When neither name nor version are provided, an error message will be displayed "Insufficient criteria"
     
     e.g. ``` $ avocat test --url http://www.example.com/services --name 'My Contract' --version 2.1```   
-    *See more detailed examples [here](https://git.soma.salesforce.com/searchdev/avocat/wiki/CLI::test).* 
+    *See more detailed examples [here](https://github.com/salesforce/Avocat/wiki/CLI::test).* 
     
     **Note that the test command uses the SID environment variable to get the Bearer authorization token.** 
     Please update it with a valid token before you start testing.
@@ -182,7 +182,6 @@ All config files could be found under the root directory.
 - [tsconfig.json](/tsconfig.json): contains [ts-node](https://github.com/TypeStrong/ts-node) config.
 - [jest.config.js](/jest.config.js): contains [Jest](https://jestjs.io/) config.
 - [.eslintrc.js](/.eslintrc.js): contains [eslint](https://eslint.org/) config.
-- [Jenkinsfile](/Jenkinsfile): contains the definition of the [SFCI](https://searchdevci.dop.sfdc.net/job/searchdev/job/avocat/) pipeline.
 
 ### Additional Scripts
 We've added some custom scripts that might be useful when coding in Avocat.
@@ -202,7 +201,7 @@ We've added some custom scripts that might be useful when coding in Avocat.
       $ npm run refresh
     ```
   
-- **Other commands:** ("ci:test", "ci:coverage", "ci:validate") these custom commands are used by [SFCI](https://searchdevci.dop.sfdc.net/job/searchdev/job/avocat/) when pushing new changes.
+- **Other commands:** ("ci:test", "ci:coverage", "ci:validate") these custom commands are used by the CI when pushing new changes.
 
 ## Supported Contract Formats
 | Format | Status |
@@ -213,7 +212,11 @@ We've added some custom scripts that might be useful when coding in Avocat.
 | XML  | Not supported |
 
 ## Authors
-[SPEP Team](https://gus.lightning.force.com/lightning/r/ADM_Scrum_Team__c/a00B0000000wkIzIAI/view), Salesforce.
+- Rami Noufal
+- Antoine Rosenbach
+- Lionel Armanet
+- Franck Barbedor
+
 
 ## License
 The [APACHE LICENSE, VERSION 2.0](./LICENSE.md) governs your use of Avocat.
