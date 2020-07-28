@@ -57,8 +57,8 @@ export class TestCliUtils {
         });
     }
 
-    public static runCommandFromCommander(mainCommand: Command, command: string, ...args: string[]): void {
-        mainCommand.parse(['ts-node', this.INDEX_TS_PATH, command, ...args]);
+    public static runCommandFromCommander(mainCommand: Command, command: string, ...args: string[]): Promise<void> {
+        return mainCommand.parseAsync(['ts-node', this.INDEX_TS_PATH, command, ...args]);
     }
 
     public static prepareIntegrationTest(): void {

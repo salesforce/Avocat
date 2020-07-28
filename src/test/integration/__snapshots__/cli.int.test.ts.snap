@@ -1,5 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`CLI Test Environment Command Test When adding a new environment with valid values should show a message that an environment was added 1`] = `"🤝 Environment 'env1' added! Now you can use it in your tests."`;
+
+exports[`CLI Test Environment Command Test When asking for the existing environments list should show a list with of the existing environments 1`] = `
+"👉 1 environment found:
+    * env1 (https://www.example.com/)"
+`;
+
 exports[`CLI Test Help Command Test When running avocat with help option Shows available options and commands 1`] = `
 "Usage: avocat [command] [options]
 
@@ -15,7 +22,9 @@ Options:
 Commands:
   status [options]
   import [options] <contract_path>
-  test [options]"
+  test [options]
+  env:add [options]
+  env:list [options]"
 `;
 
 exports[`CLI Test Import Command Test When running avocat with import command and a valid contract path Shows the message that a contract(name, version) was imported 1`] = `"🤝 Contract TEST_SAMPLE_CONTRACT imported for version 2.2.2, everything's fine."`;

@@ -28,17 +28,17 @@ export class ValidatorServiceImpl implements ValidatorService {
                 @Inject('logging-event-emitter') private loggingEE: EventEmitter) {
     }
 
-    public async* validateContractHavingNameAndVersion(hostURL: string, contractName: string, contractVersion: string): AsyncGenerator<ValidationResult[]> {
+    public async* validateContractHavingNameAndVersion(contractName: string, contractVersion: string): AsyncGenerator<ValidationResult[]> {
         this.loggingEE.emit('trace');
         this.loggingEE.emit('debug', `Looking for contract having name '${contractName}' and version '${contractVersion}'...`);
 
         const loadedContract = await this.contractRepository.findByNameAndVersion(contractName, contractVersion);
         this.loggingEE.emit('info', `Contract '${loadedContract.name}' loaded!`);
 
-        yield this.validateContract(hostURL, loadedContract);
+        yield this.validateContract(loadedContract);
     }
 
-    public async* validateContractsHavingVersion(hostURL: string, contractVersion: string): AsyncGenerator<ValidationResult[]> {
+    public async* validateContractsHavingVersion(contractVersion: string): AsyncGenerator<ValidationResult[]> {
         this.loggingEE.emit('trace');
         this.loggingEE.emit('debug', `Looking for contracts having version '${contractVersion}'...`);
 
@@ -48,11 +48,11 @@ export class ValidatorServiceImpl implements ValidatorService {
 
         for await (const loadedContract of this.loadContractsContents(contractsList)) {
             this.loggingEE.emit('info', `Contract '${loadedContract.name}' version ${loadedContract.version} loaded!`);
-            yield this.validateContract(hostURL, loadedContract);
+            yield this.validateContract(loadedContract);
         }
     }
 
-    public async* validateContractHavingName(hostURL: string, contractName: string): AsyncGenerator<ValidationResult[]> {
+    public async* validateContractHavingName(contractName: string): AsyncGenerator<ValidationResult[]> {
         this.loggingEE.emit('trace');
         this.loggingEE.emit('debug', `Looking for contracts having name '${contractName}'...`);
 
@@ -62,7 +62,7 @@ export class ValidatorServiceImpl implements ValidatorService {
 
         for await (const loadedContract of this.loadContractsContents(contractsList)) {
             this.loggingEE.emit('info', `Contract '${loadedContract.name}' version ${loadedContract.version} loaded!`);
-            yield this.validateContract(hostURL, loadedContract);
+            yield this.validateContract(loadedContract);
         }
     }
 
@@ -73,10 +73,10 @@ export class ValidatorServiceImpl implements ValidatorService {
         }
     }
 
-    private validateContract(hostURL: string, contract: Contract): Promise<ValidationResult[]> {
-        this.loggingEE.emit('info', `Running validation for the contract '${contract.name}' v'${contract.version}' on the host '${hostURL}'`);
+    private validateContract(contract: Contract): Promise<ValidationResult[]> {
+        this.loggingEE.emit('info', `Running validation for the contract '${contract.name}' v'${contract.version}'`);
 
-        const metadataBuilder = new ValidationMetadataBuilder(hostURL, contract);
+        const metadataBuilder = new ValidationMetadataBuilder(contract);
         return Promise.all(this.validateEndpoints(contract.endpoints, metadataBuilder));
     }
 
@@ -131,6 +131,14 @@ export class ValidatorServiceImpl implements ValidatorService {
             .catch(apiError => this.handleAPIError(apiError, metadata));
     }
 
+    private async callAPI(metadata: ValidationMetadata): Promise<HttpResponse> {
+        if (metadata.method === HttpMethod.GET) {
+            return this.httpClient.get(metadata.path, metadata.parameters);
+        } else {
+            throw new NotImplementedError('Sorry!! http method POST is not implemented yet');
+        }
+    }
+
     private handleValidationResult = (validationResult: ValidationResult, metadata: ValidationMetadata): ValidationResult => {
         this.loggingEE.emit('info', `EndpointResponse '${metadata.statusCode}' ${validationResult.valid ? 'validated' : 'is not valid' }!`);
         return {
@@ -143,15 +151,4 @@ export class ValidatorServiceImpl implements ValidatorService {
         this.loggingEE.emit('error', `EndpointResponse '${metadata.statusCode}' validation result: Error calling API: '${apiError.message}'`);
         return {metadata, valid: false, errors: [apiError.message]};
     };
-
-    private async callAPI(metadata: ValidationMetadata): Promise<HttpResponse> {
-        if (metadata.method === HttpMethod.GET) {
-            return this.httpClient.get(this.combineURLs(metadata.hostURL, metadata.path), metadata.parameters);
-        } else {
-            throw new NotImplementedError('Sorry!! http method POST is not implemented yet');
-        }
-    }
-
-    private combineURLs = (hostUrl: string, endpointUrl: string): string =>
-        hostUrl.replace(/\/+$/, '') + '/' + endpointUrl.replace(/^\/+/, '');
 }

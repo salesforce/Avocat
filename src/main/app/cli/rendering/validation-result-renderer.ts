@@ -1,12 +1,10 @@
 import {ValidationResult, validationResultComparator} from '../../../core/validation/model/validation-result';
 import {Inject, Service} from 'typedi';
 import {EventEmitter} from 'events';
+import {indentation} from './indentation';
 
 @Service('validation-result.renderer')
 export class ValidationResultRenderer {
-    private readonly INDENT = '  ';
-    private readonly DOUBLE_INDENT = this.INDENT.repeat(2);
-    private readonly TRIPLE_INDENT = this.INDENT.repeat(3);
 
     constructor(@Inject('output-stream') private outputStream: typeof console,
                 @Inject('logging-event-emitter') private loggingEE: EventEmitter) {
@@ -36,10 +34,10 @@ export class ValidationResultRenderer {
 
     private renderValidationResultList = (validationResultList: ValidationResult[]): void =>
         validationResultList.forEach(validationResult => {
-            this.outputStream.log(this.INDENT + validationResult.metadata.path);
-            this.outputStream.log(this.DOUBLE_INDENT + `${validationResult.valid ? '✅' : '❌'}  ${validationResult.metadata.method}: ${validationResult.metadata.statusCode}`);
+            this.outputStream.log(indentation() + validationResult.metadata.path);
+            this.outputStream.log(indentation(1) + `${validationResult.valid ? '✅' : '❌'}  ${validationResult.metadata.method}: ${validationResult.metadata.statusCode}`);
             this.renderErrorsList(validationResult.errors);
         });
 
-    private renderErrorsList = (errors: string[]): void => errors.forEach(error => this.outputStream.log(this.TRIPLE_INDENT + `- ${error}`));
+    private renderErrorsList = (errors: string[]): void => errors.forEach(error => this.outputStream.log(indentation(2) + `- ${error}`));
 }

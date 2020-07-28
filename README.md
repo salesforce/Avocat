@@ -123,12 +123,21 @@ Before you start using avocat, make sure you've installed it globally, otherwise
     Please update it with a valid token before you start testing.
     However, more authentication types will be implemented in the future.     
     e.g. ``` $ export SID='This is a valid token' ```
-       
-- CLI::amend
-- CLI::pull
-- CLI::push
-- CLI::reveng
 
+- **env**  
+    This command allows you to manage the configuration of the environments you're running tests on.
+    Instead of looking for the right URL each time you want to switch the testing environment, 
+    you can add them using the adding command. 
+    
+    An environment configuration contains a unique name, 
+    an url and an authentication token (which could be updated regularly).  
+    e.g. ``` $ avocat env:add --name MyEnv --url http://www.example.com/services --token MyAuthToken```  
+    
+    To view the available environments, you can run the list command.  
+    e.g. ``` $ avocat env:list```  
+    
+    Then, you can use one of your added environments with the test command.  
+    e.g. ``` $ avocat test --env MyEnv --name 'My Contract' --version 2.1``` 
 ### Additional Options
 - **help**  
     Show available commands/options 
