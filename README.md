@@ -212,11 +212,11 @@ We've added some custom scripts that might be useful when coding in Avocat.
 | XML  | Not supported |
 
 ## Authors
-- Rami Noufal
-- Antoine Rosenbach
-- Lionel Armanet
-- Franck Barbedor
+- [Rami Noufal](https://github.com/RamiNoufal)
+- [Antoine Rosenbach](https://github.com/arosenbach)
+- [Lionel Armanet](https://github.com/lionelarmanet)
+- [Franck Barbedor](https://github.com/KarlPatach)
 
 
 ## License
-The [APACHE LICENSE, VERSION 2.0](./LICENSE.md) governs your use of Avocat.
+The [BSD 3-Clause](./LICENSE.md) license governs your use of Avocat.
