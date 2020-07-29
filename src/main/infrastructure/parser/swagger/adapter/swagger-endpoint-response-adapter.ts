@@ -1,3 +1,10 @@
+/*!
+ * Copyright (c) 2020, Salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+
 import {EndpointResponse} from '../../../../core/contract/model/endpoint-response';
 import {OpenAPIV3} from 'openapi-types';
 import {ContentType} from '../../../../core/contract/enums/content-type';
