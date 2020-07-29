@@ -1,19 +1,39 @@
 version: 2.1
-orbs:
-  node: circleci/node@1.1.6
+
+# Custom executors definition
+executors:
+  node:
+    docker:
+      - image: circleci/node:12
+
 jobs:
-  build-and-test:
+  build:
     executor:
-      name: node/default
+      name: node
     steps:
       - checkout
       - node/with-cache:
           steps:
             - run: npm install
-            - run: npm test
-            - run: npm run coverage
-            - run: npm run validate
+            - run: npm --version
+            - run: node --version
+  test-and-coverage:
+    executor:
+      name: node
+    steps:
+      - run: npm run coverage
+  code-conformance:
+    executor:
+      name: node
+      steps:
+        - run: npm run validate
 workflows:
     build-and-test:
       jobs:
-        - build-and-test
+        - build
+        - test-and-coverage:
+            requires:
+              - build
+        - code-conformance:
+            requires:
+              - build
