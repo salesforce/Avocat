@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/salesforce/Avocat.svg?style=shield&circle-token=a21517d4cd2e705f1f4ac0b2be1ba1fb92a284e3)](https://app.circleci.com/pipelines/github/salesforce/Avocat)
+
 # avocat 
 🥑 Continuous contract testing tool for HTTP APIs
 
