@@ -201,8 +201,6 @@ We've added some custom scripts that might be useful when coding in Avocat.
       $ npm run refresh
     ```
   
-- **Other commands:** ("ci:test", "ci:coverage", "ci:validate") these custom commands are used by the CI when pushing new changes.
-
 ## Supported Contract Formats
 | Format | Status |
 | ------ | ------ |

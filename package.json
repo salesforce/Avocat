@@ -14,10 +14,7 @@
     "test:updateSnapshot": "jest src/ --updateSnapshot",
     "coverage": "jest src/ --runInBand --coverage",
     "coverage:watch": "jest --coverage --watchAll",
-    "validate": "eslint 'src/**'",
-    "ci:test": "npm test --ci -i",
-    "ci:coverage": "npm run coverage --ci -i",
-    "ci:validate": "npm run validate"
+    "validate": "eslint 'src/**'"
   },
   "engines": {
     "node": ">=10.15.3",
@@ -72,7 +69,7 @@
   "keywords": [
     "avocat",
     "OAS",
-    "OpenAPI"
+    "OpenAPI",
     "rest api test",
     "contract test",
     "test by contract",
