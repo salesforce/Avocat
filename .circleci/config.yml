@@ -25,8 +25,8 @@ jobs:
   code-conformance:
     executor:
       name: node
-      steps:
-        - run: npm run validate
+    steps:
+      - run: npm run validate
 workflows:
     build-and-test:
       jobs:
