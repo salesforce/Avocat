@@ -1,10 +1,8 @@
 version: 2.1
 orbs:
   node: circleci/node@1.1.6
-
 jobs:
-  build:
-    working_directory: ~/avocat
+  build-and-test:
     executor:
       name: node/default
     steps:
@@ -14,25 +12,9 @@ jobs:
             - run: npm install
             - run: npm --version
             - run: node --version
-  test-and-coverage:
-    working_directory: ~/avocat
-    executor:
-      name: node/default
-    steps:
       - run: npm run coverage
-  code-conformance:
-    working_directory: ~/avocat
-    executor:
-      name: node/default
-    steps:
       - run: npm run validate
 workflows:
-    build-and-test:
-      jobs:
-        - build
-        - test-and-coverage:
-            requires:
-              - build
-        - code-conformance:
-            requires:
-              - build
+  build-and-test:
+    jobs:
+      - build-and-test
