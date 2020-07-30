@@ -1,0 +1,30 @@
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
+jobs:
+  build-and-test:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run:
+                name: Install Dependencies
+                command: npm install
+            - run:
+                name: npm Running Version
+                command: npm --version
+            - run:
+                name: Node Running Version
+                command: node --version
+      - run:
+          name: Code Conformance (eslint)
+          command: npm run validate
+      - run:
+          name: Test & Coverage
+          command: npm run coverage
+workflows:
+  build-and-test:
+    jobs:
+      - build-and-test
