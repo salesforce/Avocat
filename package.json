@@ -1,0 +1,78 @@
+{
+  "name": "avocat",
+  "version": "0.1.0",
+  "description": "🥑 Continuous contract testing for HTTP APIs",
+  "main": "./dist/src/main/index.js",
+  "bin": {
+    "avocat": "./dist/src/main/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "prepare": "npm run build",
+    "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
+    "test": "jest src/ --runInBand",
+    "test:updateSnapshot": "jest src/ --updateSnapshot",
+    "coverage": "jest src/ --runInBand --coverage",
+    "coverage:watch": "jest --coverage --watchAll",
+    "validate": "eslint 'src/**'"
+  },
+  "engines": {
+    "node": ">=10.15.3",
+    "npm": ">=6.12.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:salesforce/Avocat.git"
+  },
+  "author": "Salesforce",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/clear": "^0.1.0",
+    "@types/figlet": "^1.2.0",
+    "@types/jest": "^25.1.4",
+    "@types/node": "^13.7.7",
+    "@types/rimraf": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.29.0",
+    "@typescript-eslint/parser": "^2.29.0",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.8.2",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^25.0.0",
+    "nodemon": "^2.0.2",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^25.0.0",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@apidevtools/swagger-parser": "^9.0.1",
+    "@types/cli-spinner": "^0.2.0",
+    "@types/loglevel": "^1.6.3",
+    "ajv": "^6.12.2",
+    "axios": "^0.19.2",
+    "chalk": "^3.0.0",
+    "clear": "^0.1.0",
+    "cli-spinner": "^0.2.10",
+    "commander": "^4.1.1",
+    "figlet": "^1.3.0",
+    "path": "^0.12.7",
+    "reflect-metadata": "^0.1.13",
+    "typedi": "^0.8.0"
+  },
+  "directories": {
+    "dist": "dist"
+  },
+  "keywords": [
+    "avocat",
+    "OAS",
+    "OpenAPI",
+    "rest api test",
+    "contract test",
+    "test by contract",
+    "intergration test"
+  ]
+}
