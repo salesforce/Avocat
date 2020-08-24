@@ -93,12 +93,12 @@ Before you start using avocat, make sure you've installed it globally, otherwise
 - **status**  
     This command allows you check if there is pending changes in your local repositories. It takes no parameters or options.  
     e.g. ``` $ avocat status ```  
-    *See more detailed examples [here](https://github.com/salesforce/Avocat/wiki/CLI%3A%3Astatus).*
+    *See more detailed examples [here](https://github.com/salesforce/Avocat/wiki/Status-Command).*
 
 - **import**  
     This command allows you to import new contract version into the local store. It takes one parameter which is your contract file.  
     e.g. ``` $ avocat import '/path/to/contract' ```  
-    *See more detailed examples [here](https://github.com/salesforce/Avocat/wiki/CLI%3A%3Aimport).*
+    *See more detailed examples [here](https://github.com/salesforce/Avocat/wiki/Import-Command).*
     
     **Note that the import command uses the directory ~/.avocat as the default local store.**
     In case you need to override it, please set the AVOCAT_STORE_DIR environment variable with the desired directory value.  
@@ -119,7 +119,7 @@ Before you start using avocat, make sure you've installed it globally, otherwise
     * When neither name nor version are provided, an error message will be displayed "Insufficient criteria"
     
     e.g. ``` $ avocat test --url http://www.example.com/services --name 'My Contract' --version 2.1```   
-    *See more detailed examples [here](https://github.com/salesforce/Avocat/wiki/CLI::test).* 
+    *See more detailed examples [here](https://github.com/salesforce/Avocat/wiki/Test-Command).* 
     
     **Note that the test command uses the SID environment variable to get the Bearer authorization token.** 
     Please update it with a valid token before you start testing.
@@ -139,7 +139,9 @@ Before you start using avocat, make sure you've installed it globally, otherwise
     e.g. ``` $ avocat env:list```  
     
     Then, you can use one of your added environments with the test command.  
-    e.g. ``` $ avocat test --env MyEnv --name 'My Contract' --version 2.1``` 
+    e.g. ``` $ avocat test --env MyEnv --name 'My Contract' --version 2.1```
+    
+    *See more detailed examples [here](https://github.com/salesforce/Avocat/wiki/Env-Command).* 
 ### Additional Options
 - **help**  
     Show available commands/options 
