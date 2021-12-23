@@ -52,7 +52,7 @@
     "@apidevtools/swagger-parser": "^9.0.1",
     "@types/cli-spinner": "^0.2.0",
     "@types/loglevel": "^1.6.3",
-    "ajv": "^6.12.2",
+    "ajv": "^6.12.6",
     "axios": "^0.19.2",
     "chalk": "^3.0.0",
     "clear": "^0.1.0",
