@@ -221,4 +221,4 @@ We've added some custom scripts that might be useful when coding in Avocat.
 
 
 ## License
-The [BSD 3-Clause](./LICENSE.md) license governs your use of Avocat.
+The [BSD 3-Clause](./LICENSE.md) license governs your use of Avocat.test
