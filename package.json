@@ -53,7 +53,7 @@
     "@types/cli-spinner": "^0.2.0",
     "@types/loglevel": "^1.6.3",
     "ajv": "^6.12.2",
-    "axios": "^0.19.2",
+    "axios": "^0.24.0",
     "chalk": "^3.0.0",
     "clear": "^0.1.0",
     "cli-spinner": "^0.2.10",
